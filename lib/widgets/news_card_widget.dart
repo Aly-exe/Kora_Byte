@@ -15,7 +15,7 @@ class NewsCardWidget extends StatelessWidget {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView.separated(
+            : ListView.builder(
                 itemCount: cubit.newsList.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
@@ -40,57 +40,48 @@ class NewsCardWidget extends StatelessWidget {
                                     )));
                       });
                     },
-                    child: Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        Image.network(
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          cubit.newsList[index].imagelink!,
-                          filterQuality: FilterQuality.high,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(15)),
+                              child: Image.network(
+                                cubit.newsList[index].imagelink!,
+                                height: 150,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    textDirection: TextDirection.rtl,
+                                    cubit.newsList[index].title!,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.black, // Darker at the top left
-                                Colors.black.withOpacity(.7),
-                                Colors.black.withOpacity(
-                                    0.5), // Darker at the bottom right
-                              ],
-                              stops: [
-                                0.0,
-                                0.9,
-                                1.0
-                              ], // Define stops for the gradient
-                            ),
-                            color: Colors.black.withOpacity(0.4),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              maxLines: 2,
-                              textDirection: TextDirection.rtl,
-                              cubit.newsList[index].title!,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   );
                 },
-                separatorBuilder: (context, index) => SizedBox(
-                  height: 10,
-                ),
               );
       }),
     );

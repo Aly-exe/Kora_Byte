@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kora_news/models/sources_model.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
@@ -9,10 +11,10 @@ class SourcesListViewWidget extends StatelessWidget {
     Sources(sourceName: "EPL", imagelink: "assets/images/EgplLogo.png"),
     Sources(sourceName: "FilGoal", imagelink: "assets/images/filgoallogo.jpg"),
     Sources(
-        sourceName: "Yalla Kora", imagelink: "assets/images/yallkoralogo.jpg"),
+        sourceName: "YallaKora", imagelink: "assets/images/yallkoralogo.jpg"),
     Sources(
-        sourceName: "Kora Plus", imagelink: "assets/images/Korapluslogo.jpg"),
-];
+        sourceName: "KoraPlus", imagelink: "assets/images/Korapluslogo.jpg"),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class SourcesListViewWidget extends StatelessWidget {
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
           height: 60,
-          child: ListView.separated(
+          child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return GestureDetector(
@@ -30,30 +32,31 @@ class SourcesListViewWidget extends StatelessWidget {
                     await cubit.getNews(index);
                   },
                   child: Container(
-                    color: Colors.black.withOpacity(0.2),
-                    width: 180,
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30.0),
+                      border: Border.all(color: Colors.black87),
+                    ),
+                    width: index==0 ? 120: 130,
                     child: Row(
                       children: [
-                        Image.asset(
-                          sourcesList[index].imagelink,
-                          width: 62,
-                          height: 60,
-                          fit: BoxFit.cover,
-                          filterQuality: FilterQuality.high,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30.0),
+                            child: Image.asset(
+                              sourcesList[index].imagelink,
+                              width: 45,
+                              height: 50,
+                              fit: BoxFit.cover,
+                              filterQuality: FilterQuality.high,
+                            ),
+                          ),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(sourcesList[index].sourceName),
+                        Text(sourcesList[index].sourceName ,style: TextStyle(fontWeight: FontWeight.w500), ),
                       ],
                     ),
                   ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Container(
-                  width: 10,
-                  color: Colors.white,
                 );
               },
               itemCount: sourcesList.length),

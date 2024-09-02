@@ -16,19 +16,30 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Korabyte'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            MatchesWidget(),
-            SourcesListViewWidget(),
-            NewsCardWidget()
-          ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff2412C0),Color(0xff4910BC)], // Define your gradient colors
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            title: Text('Korabyte',
+            style: TextStyle(fontSize: 20, color: Colors.white),),
+            centerTitle: true,
+          ),
         ),
+      ),
+      body: Column(
+        children: [
+          MatchesWidget(),
+          SourcesListViewWidget(),
+          NewsCardWidget()
+        ],
       ),
       floatingActionButton: FloatingActionButton(onPressed: () async {
         // await DioHelper.getData(Constants.filGaoal).then((value) {

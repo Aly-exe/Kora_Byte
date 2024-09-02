@@ -28,8 +28,19 @@ class HomeScreen extends StatelessWidget {
           ),
           child: AppBar(
             backgroundColor: Colors.transparent,
-            title: Text('Korabyte',
-            style: TextStyle(fontSize: 20, color: Colors.white),),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                    "assets/images/korabytelogo.png",
+                    height: 50,
+                    fit: BoxFit.cover,
+                    
+                ),
+                Text('Korabyte',
+                style: TextStyle(fontSize: 20, color: Colors.white),),
+              ],
+            ),
             centerTitle: true,
           ),
         ),

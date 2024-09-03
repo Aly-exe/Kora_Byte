@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GetNewsBloc()..getFilgoalNews(),
+      create: (context) => GetNewsBloc()..getFilgoalNews()..getMatches(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Kora News',

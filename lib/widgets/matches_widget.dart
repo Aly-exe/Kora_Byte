@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kora_news/services/get_news_bloc.dart';
+import 'package:kora_news/services/get_news_states.dart';
 
 class MatchesWidget extends StatelessWidget {
   const MatchesWidget({
@@ -7,52 +10,71 @@ class MatchesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage("assets/images/staduim.jpg") ,fit: BoxFit.cover)
-      ),
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 10),
-        child: Row(
-
-          children: [
-            Container(width: 45, child: Text("مانشستر يونايتد")),
-            SizedBox(
-              width: 5,
-            ),
-            Image.asset(
-              "assets/images/man.png",
-              width: 40,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("Not Start"),
-                SizedBox(
-                  height: 5,
+    return BlocBuilder<GetNewsBloc, GetNewsStates>(
+      builder: (context, state) {
+        var cubit = GetNewsBloc.get(context);
+        return state is! SucccesGetMatchesState
+            ? CircularProgressIndicator()
+            : Container(
+                height: 200,
+                width: double.infinity,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+                  child: ListView.builder(
+                      itemCount: 3,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                                width: 45,
+                                child: Text(
+                                  cubit.matchesList[index].awayTeam,
+                                )),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Image.network(
+                              "${cubit.matchesList[index].awayTeamimage}",
+                              width: 40,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  cubit.matchesList[index].matchState,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  cubit.matchesList[index].matchTime,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Image.network(
+                              "${cubit.matchesList[index].homeTeamimage}",
+                              width: 40,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              cubit.matchesList[index].homeTeam,
+                            ),
+                          ],
+                        );
+                      }),
                 ),
-                Text("10:00"),
-              ],
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Image.asset(
-              "assets/images/barca.png",
-              width: 40,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Container(width: 45, child: Text("برشلونه")),
-          ],
-        ),
-      ),
+              );
+      },
     );
   }
 }

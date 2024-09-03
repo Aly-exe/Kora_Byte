@@ -7,16 +7,64 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kora_news/constants/constants.dart';
 import 'package:kora_news/models/details_filgoal_news.dart';
 import 'package:kora_news/models/filgoal_news_model.dart';
+import 'package:kora_news/models/match_model.dart';
 import 'package:kora_news/services/get_news_states.dart';
 
 class GetNewsBloc extends Cubit<GetNewsStates> {
   GetNewsBloc() : super(GetNewsInitialState());
   static GetNewsBloc get(context) => BlocProvider.of(context);
-  Dio dio=Dio();
-  
+  Dio dio = Dio();
+
   List<FilgoalNewsModel> newsList = [];
+  List<Matches> matchesList = [];
   var newsSection;
   var detailesFilgoalNewsModel = DetailesFilgoalNewsModel();
+  Future getMatches() async {
+    var url=Uri.decodeFull(Constants.yallaKoraMatches);
+    log(url);
+    emit(LoadingMatchesState());
+
+    await dio.get(url).then((value) {
+      matchesList.clear();
+      var data =
+          BeautifulSoup(value.data).body!.findAll("div", class_: "liItem");
+      data.forEach((e) {
+        matchesList.add(
+          Matches(
+            homeTeam: e.find('div', class_: "teamA")!.find("p")!.text.trim(),
+            awayTeam: e.find('div', class_: "teamB")!.find("p")!.text.trim(),
+            matchhref: "https://www.yallakora.com${e.find("a")!.attributes['href']!.toString()}",
+            homeScore: e.find('div', class_: "MResult")!
+                .findAll("span", class_: "score")[0]
+                .text,
+            awayScore: e
+                .find('div', class_: "MResult")!
+                .findAll("span", class_: "score")[1]
+                .text,
+            matchState:
+                e.find('div', class_: "matchStatus")!.find("span")!.text,
+            matchTime: e
+                .find('div', class_: "MResult")!
+                .find("span", class_: "time")!
+                .text,
+            awayTeamimage: e
+                .find('div', class_: "teamB")!
+                .find("img")!
+                .attributes['data-src']!
+                .toString(),
+                homeTeamimage: e
+                .find('div', class_: "teamA")!
+                .find("img")!
+                .attributes['data-src']!
+                .toString())
+                );
+      }
+      );
+      emit(SucccesGetMatchesState());
+    }).catchError((error) {
+      emit(FailedGetMatchesState());
+    });
+  }
 
   Future getFilgoalNews() async {
     emit(LoadingFilgoalNewsState());
@@ -25,7 +73,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
           .body!
           .find("div", id: "main-news")!
           .findAll("div", class_: "news-block");
-        
+
       //fill NewsList By data
       newsSection.forEach((e) {
         newsList.add(FilgoalNewsModel(
@@ -157,7 +205,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
             .findAll("p");
         var description = "";
         descriptionList.forEach((e) {
-          description += e.text;
+          description += "\n ${e.text}";
         });
         var imageUrl =
             "https:${BeautifulSoup(value.data).find("div", class_: "details")!.find("img")!.attributes['src']}";
@@ -181,7 +229,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
             .findAll("p");
         var description = "";
         descriptionList.forEach((e) {
-          description += " ${e.text}";
+          description += " \n ${e.text}";
         });
         var imageUrl = BeautifulSoup(value.data)
             .find("img", class_: "w-full")!
@@ -204,7 +252,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
             .findAll("p");
         var description = "";
         descriptionList.forEach((e) {
-          description += " ${e.text.replaceAll("&nbsp;", "")}";
+          description += " \n ${e.text.replaceAll("&nbsp;", "")}";
         });
         var imageUrl = BeautifulSoup(value.data)
             .find("div", class_: "articleContainer")!
@@ -230,7 +278,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
             .findAll("p");
         var description = "";
         descriptionList.forEach((e) {
-          description += " ${e.text}";
+          description += "\n ${e.text}";
         });
         var imageUrl = BeautifulSoup(value.data)
             .find("div", class_: "detailsMainImage")!

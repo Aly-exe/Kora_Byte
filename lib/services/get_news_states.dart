@@ -9,3 +9,6 @@ class FailedGetFilgoalNewsState extends GetNewsStates{}
 class LoadingDetailsNewsState extends GetNewsStates{}
 class SucccesGetDetailsNewsState extends GetNewsStates{}
 class FailedGetDetailsNewsState extends GetNewsStates{}
+class LoadingMatchesState extends GetNewsStates{}
+class SucccesGetMatchesState extends GetNewsStates{}
+class FailedGetMatchesState extends GetNewsStates{}

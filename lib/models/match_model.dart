@@ -1,18 +1,22 @@
 class Matches {
-  final String homeTeam;
-  final String awayTeam;
-  final String matchState;
-  final String matchTime;
-  final String homeScore;
-  final String awayScore;
-  final String leagueName;
+  String homeTeam;
+  String awayTeam;
+  String matchhref;
+  String? homeTeamimage;
+  String? awayTeamimage;
+  String matchState;
+  String matchTime;
+  String homeScore;
+  String awayScore;
 
   Matches(
       {required this.homeTeam,
       required this.awayTeam,
+      required this.matchhref,
+      this.homeTeamimage,
+      this.awayTeamimage,
       required this.homeScore,
       required this.awayScore,
       required this.matchState,
-      required this.matchTime,
-      required this.leagueName});
+      required this.matchTime});
 }

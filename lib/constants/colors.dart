@@ -1,5 +1,5 @@
 import 'dart:ui';
 
-class Colors{
+class ColorPallet{
   static final Color kNavyColor=Color(0xff190159);
 }

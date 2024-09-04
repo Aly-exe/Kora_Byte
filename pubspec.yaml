@@ -40,6 +40,8 @@ dependencies:
   beautiful_soup_dart: ^0.3.0
   flutter_bloc: ^8.1.6
   flutter_native_splash: ^2.4.0
+  flutter_screenutil: ^5.9.3
+  cached_network_image: ^3.4.0
 
 dev_dependencies:
   flutter_test:

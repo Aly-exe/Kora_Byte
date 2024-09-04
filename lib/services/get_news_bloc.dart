@@ -20,8 +20,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
   var newsSection;
   var detailesFilgoalNewsModel = DetailesFilgoalNewsModel();
   Future getMatches() async {
-    var url=Uri.decodeFull(Constants.yallaKoraMatches);
-    log(url);
+    var url = Uri.decodeFull(Constants.yallaKoraMatches);
     emit(LoadingMatchesState());
 
     await dio.get(url).then((value) {
@@ -29,12 +28,13 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
       var data =
           BeautifulSoup(value.data).body!.findAll("div", class_: "liItem");
       data.forEach((e) {
-        matchesList.add(
-          Matches(
+        matchesList.add(Matches(
             homeTeam: e.find('div', class_: "teamA")!.find("p")!.text.trim(),
             awayTeam: e.find('div', class_: "teamB")!.find("p")!.text.trim(),
-            matchhref: "https://www.yallakora.com${e.find("a")!.attributes['href']!.toString()}",
-            homeScore: e.find('div', class_: "MResult")!
+            matchhref:
+                "https://www.yallakora.com${e.find("a")!.attributes['href']!.toString()}",
+            homeScore: e
+                .find('div', class_: "MResult")!
                 .findAll("span", class_: "score")[0]
                 .text,
             awayScore: e
@@ -50,16 +50,14 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
             awayTeamimage: e
                 .find('div', class_: "teamB")!
                 .find("img")!
-                .attributes['data-src']!
+                .attributes['src']!
                 .toString(),
-                homeTeamimage: e
+            homeTeamimage: e
                 .find('div', class_: "teamA")!
                 .find("img")!
-                .attributes['data-src']!
-                .toString())
-                );
-      }
-      );
+                .attributes['src']!
+                .toString()));
+      });
       emit(SucccesGetMatchesState());
     }).catchError((error) {
       emit(FailedGetMatchesState());
@@ -83,7 +81,6 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
           detailes: "There is no details till now",
           imagelink: "https:${e.find("img")!.attributes["data-src"]}",
         ));
-        log(newsList[0].imagelink.toString());
         emit(SucccesGetFilgoalNewsState());
       });
     }).catchError((error) {
@@ -110,7 +107,6 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
             detailes: "There is no details till now",
             imagelink: e.find("img")!.attributes["src"],
           ));
-          log(newsList[0].imagelink.toString());
           emit(SucccesGetNewsState());
         });
       }).catchError((error) {
@@ -133,7 +129,6 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
             detailes: "There is no details till now",
             imagelink: "https:${e.find("img")!.attributes["data-src"]}",
           ));
-          log(newsList[0].imagelink.toString());
           emit(SucccesGetNewsState());
         });
       }).catchError((error) {
@@ -156,7 +151,6 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
             detailes: "There is no details till now", //e.find("p")!.text,
             imagelink: e.find('img')!.attributes['data-src'].toString(),
           ));
-          log(newsList[0].imagelink.toString());
           emit(SucccesGetNewsState());
         });
       }).catchError((error) {
@@ -182,7 +176,6 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
                 .find('img')!
                 .attributes['src'],
           ));
-          log(newsList[0].imagelink.toString());
           emit(SucccesGetNewsState());
         });
       }).catchError((error) {

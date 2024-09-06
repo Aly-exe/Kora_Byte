@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/constants/colors.dart';
+import 'package:kora_news/screens/all_matchs_screen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 
@@ -31,8 +33,43 @@ class MatchesWidget extends StatelessWidget {
                     width: double.infinity,
                     child: MatchCard(cubit: cubit),
                   ),
-                  //Text("كل المباريات")
-                ],
+                  GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: ((context) => AllMatchs())));
+      },
+      child: Container(
+        width: 300.w,
+        margin: EdgeInsets.symmetric(vertical: 5),
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 7,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.sports_soccer, color: Colors.black),
+            SizedBox(width: 10),
+            Text(
+              'View All Matches',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    )],
               );
       },
     );

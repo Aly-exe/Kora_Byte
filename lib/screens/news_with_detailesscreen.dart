@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 // ignore: must_be_immutable
-class NewsWithDetails extends StatelessWidget {
+class DetailsNewsScreen extends StatelessWidget {
   String title;
   String imagelink;
   String details;
-  NewsWithDetails(
+  DetailsNewsScreen(
       {required this.title, required this.details, required this.imagelink});
 
   @override
@@ -44,33 +44,51 @@ class NewsWithDetails extends StatelessWidget {
         ),
       ),
         body: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    textDirection: TextDirection.rtl,
-                  ),
-                  SizedBox(height: 15),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        imagelink,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  Text(details,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500 ,),
-                      textDirection: TextDirection.rtl),
-                ],
-              )),
+          child: DetailsNewsCardWidget(title: title, imagelink: imagelink, details: details),
+        ));
+  }
+}
+
+class DetailsNewsCardWidget extends StatelessWidget {
+  const DetailsNewsCardWidget({
+    super.key,
+    required this.title,
+    required this.imagelink,
+    required this.details,
+  });
+
+  final String title;
+  final String imagelink;
+  final String details;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              textDirection: TextDirection.rtl,
+            ),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  imagelink,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+            Text(details,
+                style:
+                    TextStyle(fontSize: 20, fontWeight: FontWeight.w500 ,),
+                textDirection: TextDirection.rtl),
+          ],
         ));
   }
 }

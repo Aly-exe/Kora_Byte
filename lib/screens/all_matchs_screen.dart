@@ -16,20 +16,30 @@ class AllMatchs extends StatefulWidget {
 }
 
 class _AllMatchsState extends State<AllMatchs> {
-   Color color1 = Color.fromARGB(239, 220, 7, 7);
-  Color color2 = Color.fromARGB(236, 209, 20, 20);
-  Color? currentColor = Color.fromARGB(239, 220, 7, 7);
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        currentColor == Color.fromARGB(239, 220, 7, 7)
-            ? currentColor = color2
-            : currentColor = color1;
-      });
-    });
-  }
+  //  Timer? timer;
+  //  Color color1 = Color.fromARGB(239, 220, 7, 7);
+  // Color color2 = Color.fromARGB(236, 209, 20, 20);
+  // Color? currentColor = Color.fromARGB(239, 220, 7, 7);
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   timer = Timer.periodic(const Duration(milliseconds: 250), (timer) {
+  //     if (mounted) {  // Check if the widget is still mounted before calling setState
+  //       setState(() {
+  //         currentColor == const Color.fromARGB(239, 220, 7, 7)
+  //             ? currentColor = color2
+  //             : currentColor = color1;
+  //       });
+  //     }
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   timer?.cancel();  // Cancel the timer to avoid further callbacks
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,6 +117,14 @@ class _AllMatchsState extends State<AllMatchs> {
                               // Some Info about Match (Start || Not Start || finished || Match Time)
                               Container(
               width: 70.w,
+              height: cubit.matchesList[index].matchState ==
+                                "الشوط الأول" ||
+                            cubit.matchesList[index].matchState ==
+                                "الشوط الثاني" ||
+                            cubit.matchesList[index].matchState ==
+                                "استراحة"
+                        ? 30.h
+                        : 55.h,
               decoration: BoxDecoration(
                 color: cubit.matchesList[index].matchState ==
                             "الشوط الأول" ||
@@ -114,7 +132,7 @@ class _AllMatchsState extends State<AllMatchs> {
                             "الشوط الثاني" ||
                         cubit.matchesList[index].matchState ==
                             "استراحة"
-                    ? currentColor
+                    ? Color(0xffC00A0C)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(30),
               ),
@@ -136,7 +154,7 @@ class _AllMatchsState extends State<AllMatchs> {
                           children: [
                             Text(
                               cubit.matchesList[index].matchState,
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.white ,fontSize: 13.0),
                             ),
                           ],
                         )

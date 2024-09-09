@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -180,6 +181,27 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
       }).catchError((error) {
         emit(FailedGetNewsState());
       });
+    } else if (index == 4) {
+      await dio.get(Constants.btolat).then((value) {
+        newsSection = BeautifulSoup(value.data)
+            .body!
+            .findAll("div", class_: "categoryNewsCard");
+        newsList.clear();
+
+        //fill NewsList By data
+        newsSection.forEach((e) {
+          newsList.add(FilgoalNewsModel(
+            baseurl: "https://www.btolat.com",
+            href: e.find('a')!.attributes['href'],
+            title: e.find('h3')!.text.toString().trim(),
+            detailes: "There is no details till now",
+            imagelink: e.find('img')!.attributes['data-original'],
+          ));
+          emit(SucccesGetNewsState());
+        });
+      }).catchError((error) {
+        emit(FailedGetNewsState());
+      });
     }
   }
 
@@ -274,6 +296,44 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
         });
         var imageUrl = BeautifulSoup(value.data)
             .find("div", class_: "detailsMainImage")!
+            .find("img")!
+            .attributes['src'];
+        detailesFilgoalNewsModel.title = title;
+        detailesFilgoalNewsModel.imagelink = imageUrl;
+        detailesFilgoalNewsModel.detailes = description;
+        emit(SucccesGetDetailsNewsState());
+      }).catchError((error) {
+        emit(FailedGetDetailsNewsState());
+      });
+    } else if (baseurl == "https://www.btolat.com") {
+      await dio.get(baseurl + Url).then((value) {
+        var title = BeautifulSoup(value.data)
+            .find("article", class_: "post")!
+            .find("h1", class_: "title")!
+            .text
+            .trim();
+        var descriptionList = BeautifulSoup(value.data)
+            .find("div", class_: "article-body")!
+            .findAll("p");
+        var style = '''#aniBox {
+        margin: 0px;
+    }
+
+        #aniBox div, #gpt-passback, #gpt-passback div, .aries_stage, .article-body div {
+            margin-bottom: 0px;
+        }''';
+        var script = '''var s, r = false;
+    s = document.createElement('script');
+    s.src = "https://cdn.ideanetwork.site/js/AdScript/Btolat/Init.js?" + new Date().toJSON().slice(0, 13);
+    document.getElementsByTagName('body')[0].appendChild(s);''';
+
+        var description = "";
+        descriptionList.forEach((e) {
+          description +=
+              "${e.getText().replaceAll(style, '').replaceAll(script, '')}";
+        });
+        var imageUrl = BeautifulSoup(value.data)
+            .find("div", class_: "image-box")!
             .find("img")!
             .attributes['src'];
         detailesFilgoalNewsModel.title = title;

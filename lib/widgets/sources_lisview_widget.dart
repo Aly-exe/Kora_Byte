@@ -14,6 +14,8 @@ class SourcesListViewWidget extends StatelessWidget {
         sourceName: "YallaKora", imagelink: "assets/images/yallkoralogo.jpg"),
     Sources(
         sourceName: "KoraPlus", imagelink: "assets/images/Korapluslogo.jpg"),
+    Sources(
+        sourceName: "Btolat", imagelink: "assets/images/btolat.png"),
   ];
 
   @override

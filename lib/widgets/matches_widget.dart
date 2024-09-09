@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
 import 'dart:developer';
 
@@ -29,47 +31,52 @@ class MatchesWidget extends StatelessWidget {
             : Column(
                 children: [
                   Container(
-                    height: 170.h,
+                    height: 160.h,
                     width: double.infinity,
                     child: MatchCard(cubit: cubit),
                   ),
                   GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: ((context) => AllMatchs())));
-      },
-      child: Container(
-        width: 300.w,
-        margin: EdgeInsets.symmetric(vertical: 5),
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.sports_soccer, color: Colors.black),
-            SizedBox(width: 10),
-            Text(
-              'View All Matches',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-      ),
-    )],
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => AllMatchs())));
+                    },
+                    child: Container(
+                      width: 300.w,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 7,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.sports_soccer, color: Colors.black),
+                          SizedBox(width: 10),
+                          Text(
+                            'View All Matches',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                
+                ],
               );
       },
     );
@@ -102,21 +109,6 @@ class MatchCard extends StatefulWidget {
 }
 
 class _MatchCardState extends State<MatchCard> {
-  @override
-  Color color1 = Color.fromARGB(239, 220, 7, 7);
-  Color color2 = Color.fromARGB(236, 209, 20, 20);
-  Color? currentColor = Color.fromARGB(239, 220, 7, 7);
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        currentColor == Color.fromARGB(239, 220, 7, 7)
-            ? currentColor = color2
-            : currentColor = color1;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +140,15 @@ class _MatchCardState extends State<MatchCard> {
                 ),
                 // Some Info about Match (Start || Not Start || finished || Match Time)
                 Container(
-                    width: 70.w,
+                    width: 75.w,
+                    height: widget.cubit.matchesList[index].matchState ==
+                                "الشوط الأول" ||
+                            widget.cubit.matchesList[index].matchState ==
+                                "الشوط الثاني" ||
+                            widget.cubit.matchesList[index].matchState ==
+                                "استراحة"
+                        ? 30.h
+                        : 55.h,
                     decoration: BoxDecoration(
                       color: widget.cubit.matchesList[index].matchState ==
                                   "الشوط الأول" ||
@@ -156,7 +156,7 @@ class _MatchCardState extends State<MatchCard> {
                                   "الشوط الثاني" ||
                               widget.cubit.matchesList[index].matchState ==
                                   "استراحة"
-                          ? currentColor
+                          ? Color(0xffC00A0C)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -178,7 +178,8 @@ class _MatchCardState extends State<MatchCard> {
                                 children: [
                                   Text(
                                     widget.cubit.matchesList[index].matchState,
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 13.0),
                                   ),
                                 ],
                               )

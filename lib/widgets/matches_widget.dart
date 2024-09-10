@@ -1,8 +1,7 @@
 // ignore_for_file: must_be_immutable
-
-import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,62 +24,151 @@ class MatchesWidget extends StatelessWidget {
     return BlocBuilder<GetNewsBloc, GetNewsStates>(
       builder: (context, state) {
         var cubit = GetNewsBloc.get(context);
-        return cubit.matchesList
-                .isEmpty //state is LoadingMatchesState || state is FailedGetMatchesState ||
-            ? Container(
-                height: 170.h,
-                width: double.infinity,
-                child: Center(child: ProgressIndicator()))
-            : Column(
-                children: [
-                  Container(
-                    height: 160.h,
-                    width: double.infinity,
-                    child: MatchCard(cubit: cubit),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => AllMatchs())));
-                    },
-                    child: Container(
-                      width: 300.w,
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 3,
-                            blurRadius: 7,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
+        return Column(
+          children: [
+            Container(
+              width: 150.w,
+              height: 40.h,
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          cubit.changeCurrentindex(0);
+                          await cubit.getMatches(
+                              link: Constants.yallaKoraMatchesYesterday);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: BorderDirectional(
+                                  bottom: BorderSide(
+                            color: cubit.currentindex == 0
+                                ? ColorPallet.kNavyColor
+                                : Colors.transparent,
+                          ))),
+                          alignment: Alignment.centerRight,
+                          width: 30.w,
+                          child: Text("أمس"),
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.sports_soccer, color: Colors.black),
-                          SizedBox(width: 10),
-                          Text(
-                            'View All Matches',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
+                      Container(
+                        alignment: Alignment.center,
+                        width: 1.h,
+                        color: Colors.black,
+                        height: 25.h,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          cubit.changeCurrentindex(1);
+                          await cubit.getMatches(
+                              link: Constants.yallaKoraMatches);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: BorderDirectional(
+                                  bottom: BorderSide(
+                            color: cubit.currentindex == 1
+                                ? ColorPallet.kNavyColor
+                                : Colors.transparent,
+                          ))),
+                          alignment: Alignment.center,
+                          width: 50.w,
+                          child: Text("اليوم"),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: 1.h,
+                        color: Colors.black,
+                        height: 25.h,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          cubit.changeCurrentindex(2);
+                          await cubit.getMatches(
+                              link: Constants.yallaKoraMatchesNextDay);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: BorderDirectional(
+                                  bottom: BorderSide(
+                            color: cubit.currentindex == 2
+                                ? ColorPallet.kNavyColor
+                                : Colors.transparent,
+                          ))),
+                          padding: EdgeInsets.only(right: 7.w),
+                          alignment: Alignment.centerRight,
+                          width: 30.w,
+                          child: Text("غدا"),
+                        ),
+                      ),
+                    ]),
+              ),
+            ),
+            Container(
+              height: cubit.matchesList.length >= 3 ? 160.h : 105.h,
+              width: double.infinity,
+              child: state
+                      is LoadingMatchesState // || state is FailedGetMatchesState || cubit.matchesList.isEmpty ||
+                  ? Container(
+                      height: 170.h,
+                      width: double.infinity,
+                      child: Center(child: ProgressIndicator()))
+                  : state is SucccesGetMatchesState &&
+                          cubit.matchesList.isNotEmpty
+                      ? MatchCard(cubit: cubit)
+                      : cubit.matchesList.isEmpty &&
+                              state is SucccesGetMatchesState
+                          ? Container(
+                              height: 170.h,
+                              width: double.infinity,
+                              child:
+                                  Center(child: Text("لا توجد مباريات اليوم")))
+                          : SizedBox(),
+            ),
+            // View All Matches Container
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => AllMatchs())));
+              },
+              child: Container(
+                width: 300.w,
+                margin: EdgeInsets.symmetric(vertical: 5),
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 3,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.sports_soccer, color: Colors.black),
+                    SizedBox(width: 10),
+                    Text(
+                      'View All Matches',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
-                  )
-                
-                ],
-              );
+                  ],
+                ),
+              ),
+            )
+          ],
+        );
       },
     );
   }
@@ -112,19 +200,30 @@ class MatchCard extends StatefulWidget {
 }
 
 class _MatchCardState extends State<MatchCard> {
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
-        itemCount: 3,
+        itemCount: widget.cubit.matchesList.length >= 3
+            ? 3
+            : widget.cubit.matchesList.length >= 2
+                ? 2
+                : widget.cubit.matchesList.length >= 1
+                    ? 1
+                    : 0,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: ()async{
+            onTap: () async {
               log("Passed Url from Medole \n ${widget.cubit.matchesList[index].matchhref}");
-              await GetNewsBloc.get(context).getMatchDetails(Uri.decodeFull(widget.cubit.matchesList[index].matchhref) ).then((value){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MatchDetailsScreen()));
-              }).catchError((error){
+              await GetNewsBloc.get(context)
+                  .getMatchDetails(
+                      Uri.decodeFull(widget.cubit.matchesList[index].matchhref))
+                  .then((value) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MatchDetailsScreen()));
+              }).catchError((error) {
                 log(error);
               });
             },
@@ -172,7 +271,8 @@ class _MatchCardState extends State<MatchCard> {
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: widget.cubit.matchesList[index].matchState == "انتهت"
+                      child: widget.cubit.matchesList[index].matchState ==
+                              "انتهت"
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -189,7 +289,8 @@ class _MatchCardState extends State<MatchCard> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      widget.cubit.matchesList[index].matchState,
+                                      widget
+                                          .cubit.matchesList[index].matchState,
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 13.0),
                                     ),
@@ -199,14 +300,15 @@ class _MatchCardState extends State<MatchCard> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      widget.cubit.matchesList[index].matchState,
+                                      widget
+                                          .cubit.matchesList[index].matchState,
                                     ),
                                     Text(
                                       widget.cubit.matchesList[index].matchTime,
                                     ),
                                   ],
                                 )),
-            
+
                   SizedBox(
                     width: 5.w,
                   ),
@@ -220,7 +322,7 @@ class _MatchCardState extends State<MatchCard> {
                   TeamImageWidget(
                     imageUrl: widget.cubit.matchesList[index].homeTeamimage!,
                   ),
-            
+
                   // Home Team Name
                   TeamNameWidget(
                     teamName: widget.cubit.matchesList[index].homeTeam,

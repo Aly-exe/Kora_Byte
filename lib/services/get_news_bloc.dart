@@ -15,51 +15,55 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
   GetNewsBloc() : super(GetNewsInitialState());
   static GetNewsBloc get(context) => BlocProvider.of(context);
   Dio dio = Dio();
- late MatchDetails matchinfo=MatchDetails();
+  late MatchDetails matchinfo = MatchDetails();
 
   List<FilgoalNewsModel> newsList = [];
   List<Matches> matchesList = [];
   var newsSection;
   var detailesFilgoalNewsModel = DetailesFilgoalNewsModel();
-  Future getMatches() async {
-    var url = Uri.decodeFull(Constants.yallaKoraMatches);
+  Future getMatches({String? link}) async {
+    var url = Uri.decodeFull(link ?? Constants.yallaKoraMatches);
     emit(LoadingMatchesState());
 
-    await dio.get(url).then((value) {
+    await dio.get(link ?? url).then((value) {
+      // matchesList.add(Matches(homeTeam: "", awayTeam: "", matchhref: "", homeScore: "", awayScore: "", matchState: "", matchTime: ""));
       matchesList.clear();
       var data =
-          BeautifulSoup(value.data).body!.findAll("div", class_: "liItem");
-      data.forEach((e) {
-        matchesList.add(Matches(
-            homeTeam: e.find('div', class_: "teamA")!.find("p")!.text.trim(),
-            awayTeam: e.find('div', class_: "teamB")!.find("p")!.text.trim(),
-            matchhref:
-                "https://www.yallakora.com${e.find("a")!.attributes['href']!.toString()}",
-            homeScore: e
-                .find('div', class_: "MResult")!
-                .findAll("span", class_: "score")[0]
-                .text,
-            awayScore: e
-                .find('div', class_: "MResult")!
-                .findAll("span", class_: "score")[1]
-                .text,
-            matchState:
-                e.find('div', class_: "matchStatus")!.find("span")!.text,
-            matchTime: e
-                .find('div', class_: "MResult")!
-                .find("span", class_: "time")!
-                .text,
-            awayTeamimage: e
-                .find('div', class_: "teamB")!
-                .find("img")!
-                .attributes['src']!
-                .toString(),
-            homeTeamimage: e
-                .find('div', class_: "teamA")!
-                .find("img")!
-                .attributes['src']!
-                .toString()));
-      });
+          BeautifulSoup(value.data).body?.findAll("div", class_: "liItem");
+      if (data != null) {
+        data.forEach((e) {
+          matchesList.add(Matches(
+              homeTeam: e.find('div', class_: "teamA")!.find("p")!.text.trim(),
+              awayTeam: e.find('div', class_: "teamB")!.find("p")!.text.trim(),
+              matchhref:
+                  "https://www.yallakora.com${e.find("a")!.attributes['href']!.toString()}",
+              homeScore: e
+                  .find('div', class_: "MResult")!
+                  .findAll("span", class_: "score")[0]
+                  .text,
+              awayScore: e
+                  .find('div', class_: "MResult")!
+                  .findAll("span", class_: "score")[1]
+                  .text,
+              matchState:
+                  e.find('div', class_: "matchStatus")!.find("span")!.text,
+              matchTime: e
+                  .find('div', class_: "MResult")!
+                  .find("span", class_: "time")!
+                  .text,
+              awayTeamimage: e
+                  .find('div', class_: "teamB")!
+                  .find("img")!
+                  .attributes['src']!
+                  .toString(),
+              homeTeamimage: e
+                  .find('div', class_: "teamA")!
+                  .find("img")!
+                  .attributes['src']!
+                  .toString()));
+        });
+      }
+
       emit(SucccesGetMatchesState());
     }).catchError((error) {
       emit(FailedGetMatchesState());
@@ -354,75 +358,91 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
     await dio.get(encoded).then((value) {
       var dataContainer =
           BeautifulSoup(value.data).find("section", class_: "mtchDtlsRslt");
-          log(dataContainer.toString());
+      log(dataContainer.toString());
       matchinfo.championName = dataContainer
-          ?.find("div", class_: "tourName")
-          ?.find("div", class_: "tourNameBtn")
-          ?.find("a")
-          ?.text
-          .toString()??"Dont Find Champion Name";
+              ?.find("div", class_: "tourName")
+              ?.find("div", class_: "tourNameBtn")
+              ?.find("a")
+              ?.text
+              .toString() ??
+          "Dont Find Champion Name";
       matchinfo.round = dataContainer
-          ?.find("div", class_: "tourName")
-                  ?.find("div", class_: "tourNameBtn")
-                  ?.find("p")
-                  ?.text
-                  .trim()
-                  .toString() ??
-              "Dont Find Round";
+              ?.find("div", class_: "tourName")
+              ?.find("div", class_: "tourNameBtn")
+              ?.find("p")
+              ?.text
+              .trim()
+              .toString() ??
+          "Dont Find Round";
       matchinfo.date = dataContainer
-          ?.find("div", class_: "tourNameBtn matchDateInfo")
-          ?.find("span", class_: "date")
-          ?.text
-          .toString()??"No Date";
+              ?.find("div", class_: "tourNameBtn matchDateInfo")
+              ?.find("span", class_: "date")
+              ?.text
+              .toString() ??
+          "No Date";
       matchinfo.time = dataContainer
-          ?.find("div", class_: "tourNameBtn matchDateInfo")
-          ?.find("span", class_: "time")
-          ?.text
-          .toString()??"No Time";
+              ?.find("div", class_: "tourNameBtn matchDateInfo")
+              ?.find("span", class_: "time")
+              ?.text
+              .toString() ??
+          "No Time";
       matchinfo.teamAname = dataContainer
-          ?.find("div", class_: "matchScoreInfo")
-          ?.find("div", class_: "team teamA")
-          ?.find("p")
-          ?.text
-          .toString()
-          .trim()??"Team A";
+              ?.find("div", class_: "matchScoreInfo")
+              ?.find("div", class_: "team teamA")
+              ?.find("p")
+              ?.text
+              .toString()
+              .trim() ??
+          "Team A";
       matchinfo.teamAimageLink = dataContainer
-          ?.find("div", class_: "matchScoreInfo")
-          ?.find("div", class_: "team teamA")
-          ?.find("img")
-          ?.attributes['src']
-          .toString()??"Dont Find A IMage Link";
+              ?.find("div", class_: "matchScoreInfo")
+              ?.find("div", class_: "team teamA")
+              ?.find("img")
+              ?.attributes['src']
+              .toString() ??
+          "Dont Find A IMage Link";
       matchinfo.matchState = dataContainer
               ?.find("div", class_: "matchResult")
               ?.find("p")
               ?.text
               .toString() ??
           "لم تبدأ";
-          String? TeamAScoreContainer = dataContainer
-                  ?.find("div", class_: "matchResult")
-              ?.find("div", class_: "result")
-              ?.find("span", class_: "a")?.text
-              .toString();
-      matchinfo.teamAscore = TeamAScoreContainer?.length == 0? "0": TeamAScoreContainer!.length > 2 ? "0" : TeamAScoreContainer ;
-          String? TeamBScoreContainer = dataContainer
-                  ?.find("div", class_: "matchResult")
-              ?.find("div", class_: "result")
-              ?.find("span", class_: "b")
-              .toString();
-      matchinfo.teamBscore = TeamBScoreContainer?.length == 0? "0": TeamBScoreContainer!.length > 2 ? "0" : TeamBScoreContainer ;
-      matchinfo.teamBname = dataContainer
-          ?.find("div", class_: "matchScoreInfo")
-          ?.find("div", class_: "team teamB")
-          ?.find("p")
+      String? TeamAScoreContainer = dataContainer
+          ?.find("div", class_: "matchResult")
+          ?.find("div", class_: "result")
+          ?.find("span", class_: "a")
           ?.text
-          .toString()
-          .trim()?? "Team B";
+          .toString();
+      matchinfo.teamAscore = TeamAScoreContainer?.length == 0
+          ? "0"
+          : TeamAScoreContainer!.length > 2
+              ? "0"
+              : TeamAScoreContainer;
+      String? TeamBScoreContainer = dataContainer
+          ?.find("div", class_: "matchResult")
+          ?.find("div", class_: "result")
+          ?.find("span", class_: "b")
+          .toString();
+      matchinfo.teamBscore = TeamBScoreContainer?.length == 0
+          ? "0"
+          : TeamBScoreContainer!.length > 2
+              ? "0"
+              : TeamBScoreContainer;
+      matchinfo.teamBname = dataContainer
+              ?.find("div", class_: "matchScoreInfo")
+              ?.find("div", class_: "team teamB")
+              ?.find("p")
+              ?.text
+              .toString()
+              .trim() ??
+          "Team B";
       matchinfo.teamBimageLink = dataContainer
-          ?.find("div", class_: "matchScoreInfo")
-          ?.find("div", class_: "team teamB")
-          ?.find("img")
-          ?.attributes['src']
-          ?.toString()??"Dont Find B Image Link";
+              ?.find("div", class_: "matchScoreInfo")
+              ?.find("div", class_: "team teamB")
+              ?.find("img")
+              ?.attributes['src']
+              ?.toString() ??
+          "Dont Find B Image Link";
       matchinfo.tvChannels = dataContainer
               ?.find("div", class_: "matchDetInfo")
               ?.find("span")
@@ -435,5 +455,10 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
       print('Error: $Error');
       emit(FailedGetDetailsMatchesState());
     });
+  }
+
+  int currentindex = 1;
+  void changeCurrentindex(int index) {
+    currentindex = index;
   }
 }

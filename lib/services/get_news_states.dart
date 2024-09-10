@@ -12,3 +12,6 @@ class FailedGetDetailsNewsState extends GetNewsStates{}
 class LoadingMatchesState extends GetNewsStates{}
 class SucccesGetMatchesState extends GetNewsStates{}
 class FailedGetMatchesState extends GetNewsStates{}
+class LoadingDetailsMatchesState extends GetNewsStates{}
+class SucccesGetDetailsMatchesState extends GetNewsStates{}
+class FailedGetDetailsMatchesState extends GetNewsStates{}

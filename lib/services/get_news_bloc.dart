@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kora_news/constants/constants.dart';
 import 'package:kora_news/models/details_filgoal_news.dart';
 import 'package:kora_news/models/filgoal_news_model.dart';
+import 'package:kora_news/models/match_details_model.dart';
 import 'package:kora_news/models/match_model.dart';
 import 'package:kora_news/services/get_news_states.dart';
 
@@ -14,6 +15,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
   GetNewsBloc() : super(GetNewsInitialState());
   static GetNewsBloc get(context) => BlocProvider.of(context);
   Dio dio = Dio();
+ late MatchDetails matchinfo=MatchDetails();
 
   List<FilgoalNewsModel> newsList = [];
   List<Matches> matchesList = [];
@@ -344,5 +346,94 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
         emit(FailedGetDetailsNewsState());
       });
     }
+  }
+
+  Future getMatchDetails(String url) async {
+    emit(LoadingDetailsMatchesState());
+    var encoded = Uri.encodeFull(url);
+    await dio.get(encoded).then((value) {
+      var dataContainer =
+          BeautifulSoup(value.data).find("section", class_: "mtchDtlsRslt");
+          log(dataContainer.toString());
+      matchinfo.championName = dataContainer
+          ?.find("div", class_: "tourName")
+          ?.find("div", class_: "tourNameBtn")
+          ?.find("a")
+          ?.text
+          .toString()??"Dont Find Champion Name";
+      matchinfo.round = dataContainer
+          ?.find("div", class_: "tourName")
+                  ?.find("div", class_: "tourNameBtn")
+                  ?.find("p")
+                  ?.text
+                  .trim()
+                  .toString() ??
+              "Dont Find Round";
+      matchinfo.date = dataContainer
+          ?.find("div", class_: "tourNameBtn matchDateInfo")
+          ?.find("span", class_: "date")
+          ?.text
+          .toString()??"No Date";
+      matchinfo.time = dataContainer
+          ?.find("div", class_: "tourNameBtn matchDateInfo")
+          ?.find("span", class_: "time")
+          ?.text
+          .toString()??"No Time";
+      matchinfo.teamAname = dataContainer
+          ?.find("div", class_: "matchScoreInfo")
+          ?.find("div", class_: "team teamA")
+          ?.find("p")
+          ?.text
+          .toString()
+          .trim()??"Team A";
+      matchinfo.teamAimageLink = dataContainer
+          ?.find("div", class_: "matchScoreInfo")
+          ?.find("div", class_: "team teamA")
+          ?.find("img")
+          ?.attributes['src']
+          .toString()??"Dont Find A IMage Link";
+      matchinfo.matchState = dataContainer
+              ?.find("div", class_: "matchResult")
+              ?.find("p")
+              ?.text
+              .toString() ??
+          "لم تبدأ";
+          String? TeamAScoreContainer = dataContainer
+                  ?.find("div", class_: "matchResult")
+              ?.find("div", class_: "result")
+              ?.find("span", class_: "a")?.text
+              .toString();
+      matchinfo.teamAscore = TeamAScoreContainer?.length == 0? "0": TeamAScoreContainer!.length > 2 ? "0" : TeamAScoreContainer ;
+          String? TeamBScoreContainer = dataContainer
+                  ?.find("div", class_: "matchResult")
+              ?.find("div", class_: "result")
+              ?.find("span", class_: "b")
+              .toString();
+      matchinfo.teamBscore = TeamBScoreContainer?.length == 0? "0": TeamBScoreContainer!.length > 2 ? "0" : TeamBScoreContainer ;
+      matchinfo.teamBname = dataContainer
+          ?.find("div", class_: "matchScoreInfo")
+          ?.find("div", class_: "team teamB")
+          ?.find("p")
+          ?.text
+          .toString()
+          .trim()?? "Team B";
+      matchinfo.teamBimageLink = dataContainer
+          ?.find("div", class_: "matchScoreInfo")
+          ?.find("div", class_: "team teamB")
+          ?.find("img")
+          ?.attributes['src']
+          ?.toString()??"Dont Find B Image Link";
+      matchinfo.tvChannels = dataContainer
+              ?.find("div", class_: "matchDetInfo")
+              ?.find("span")
+              ?.text
+              .toString() ??
+          "لا توجد قنوات ناقله";
+
+      emit(SucccesGetDetailsMatchesState());
+    }).catchError((Error) {
+      print('Error: $Error');
+      emit(FailedGetDetailsMatchesState());
+    });
   }
 }

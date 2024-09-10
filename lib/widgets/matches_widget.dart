@@ -8,7 +8,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/constants/colors.dart';
+import 'package:kora_news/constants/constants.dart';
+import 'package:kora_news/models/match_details_model.dart';
 import 'package:kora_news/screens/all_matchs_screen.dart';
+import 'package:kora_news/screens/match_details_screen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 
@@ -116,104 +119,114 @@ class _MatchCardState extends State<MatchCard> {
         physics: NeverScrollableScrollPhysics(),
         itemCount: 3,
         itemBuilder: (context, index) {
-          return Container(
-            height: 55.h,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Away Team Name
-                TeamNameWidget(
-                  teamName: widget.cubit.matchesList[index].awayTeam,
-                ),
-                // Away Team Image
-                TeamImageWidget(
-                  imageUrl: widget.cubit.matchesList[index].awayTeamimage!,
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                // Away Team Score
-                TeamScoreWidget(
-                    teamScore: widget.cubit.matchesList[index].awayScore),
-                SizedBox(
-                  width: 5.w,
-                ),
-                // Some Info about Match (Start || Not Start || finished || Match Time)
-                Container(
-                    width: 75.w,
-                    height: widget.cubit.matchesList[index].matchState ==
-                                "الشوط الأول" ||
-                            widget.cubit.matchesList[index].matchState ==
-                                "الشوط الثاني" ||
-                            widget.cubit.matchesList[index].matchState ==
-                                "استراحة"
-                        ? 30.h
-                        : 55.h,
-                    decoration: BoxDecoration(
-                      color: widget.cubit.matchesList[index].matchState ==
+          return GestureDetector(
+            onTap: ()async{
+              log("Passed Url from Medole \n ${widget.cubit.matchesList[index].matchhref}");
+              await GetNewsBloc.get(context).getMatchDetails(Uri.decodeFull(widget.cubit.matchesList[index].matchhref) ).then((value){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MatchDetailsScreen()));
+              }).catchError((error){
+                log(error);
+              });
+            },
+            child: Container(
+              height: 55.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Away Team Name
+                  TeamNameWidget(
+                    teamName: widget.cubit.matchesList[index].awayTeam,
+                  ),
+                  // Away Team Image
+                  TeamImageWidget(
+                    imageUrl: widget.cubit.matchesList[index].awayTeamimage!,
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  // Away Team Score
+                  TeamScoreWidget(
+                      teamScore: widget.cubit.matchesList[index].awayScore),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  // Some Info about Match (Start || Not Start || finished || Match Time)
+                  Container(
+                      width: 75.w,
+                      height: widget.cubit.matchesList[index].matchState ==
                                   "الشوط الأول" ||
                               widget.cubit.matchesList[index].matchState ==
                                   "الشوط الثاني" ||
                               widget.cubit.matchesList[index].matchState ==
                                   "استراحة"
-                          ? Color(0xffC00A0C)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: widget.cubit.matchesList[index].matchState == "انتهت"
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("انتهت"),
-                            ],
-                          )
-                        : widget.cubit.matchesList[index].matchState ==
+                          ? 30.h
+                          : 55.h,
+                      decoration: BoxDecoration(
+                        color: widget.cubit.matchesList[index].matchState ==
                                     "الشوط الأول" ||
                                 widget.cubit.matchesList[index].matchState ==
                                     "الشوط الثاني" ||
                                 widget.cubit.matchesList[index].matchState ==
                                     "استراحة"
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    widget.cubit.matchesList[index].matchState,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 13.0),
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    widget.cubit.matchesList[index].matchState,
-                                  ),
-                                  Text(
-                                    widget.cubit.matchesList[index].matchTime,
-                                  ),
-                                ],
-                              )),
-
-                SizedBox(
-                  width: 5.w,
-                ),
-                // Home Team Score
-                TeamScoreWidget(
-                    teamScore: widget.cubit.matchesList[index].homeScore),
-                SizedBox(
-                  width: 10.w,
-                ),
-                // Home Team Image
-                TeamImageWidget(
-                  imageUrl: widget.cubit.matchesList[index].homeTeamimage!,
-                ),
-
-                // Home Team Name
-                TeamNameWidget(
-                  teamName: widget.cubit.matchesList[index].homeTeam,
-                ),
-              ],
+                            ? Color(0xffC00A0C)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: widget.cubit.matchesList[index].matchState == "انتهت"
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("انتهت"),
+                              ],
+                            )
+                          : widget.cubit.matchesList[index].matchState ==
+                                      "الشوط الأول" ||
+                                  widget.cubit.matchesList[index].matchState ==
+                                      "الشوط الثاني" ||
+                                  widget.cubit.matchesList[index].matchState ==
+                                      "استراحة"
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      widget.cubit.matchesList[index].matchState,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 13.0),
+                                    ),
+                                  ],
+                                )
+                              : Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      widget.cubit.matchesList[index].matchState,
+                                    ),
+                                    Text(
+                                      widget.cubit.matchesList[index].matchTime,
+                                    ),
+                                  ],
+                                )),
+            
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  // Home Team Score
+                  TeamScoreWidget(
+                      teamScore: widget.cubit.matchesList[index].homeScore),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  // Home Team Image
+                  TeamImageWidget(
+                    imageUrl: widget.cubit.matchesList[index].homeTeamimage!,
+                  ),
+            
+                  // Home Team Name
+                  TeamNameWidget(
+                    teamName: widget.cubit.matchesList[index].homeTeam,
+                  ),
+                ],
+              ),
             ),
           );
         });

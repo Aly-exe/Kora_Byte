@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/constants/colors.dart';
 import 'package:kora_news/constants/constants.dart';
-import 'package:kora_news/models/match_details_model.dart';
 import 'package:kora_news/screens/all_matchs_screen.dart';
 import 'package:kora_news/screens/match_details_screen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
@@ -116,7 +115,7 @@ class MatchesWidget extends StatelessWidget {
                       height: 170.h,
                       width: double.infinity,
                       child: Center(child: ProgressIndicator()))
-                  : state is SucccesGetMatchesState &&
+                  : state is! FailedGetMatchesState &&
                           cubit.matchesList.isNotEmpty
                       ? MatchCard(cubit: cubit)
                       : cubit.matchesList.isEmpty &&
@@ -124,8 +123,8 @@ class MatchesWidget extends StatelessWidget {
                           ? Container(
                               height: 170.h,
                               width: double.infinity,
-                              child:
-                                  Center(child: Text("لا توجد مباريات اليوم")))
+                              child: Center(
+                                  child: Text(" 😔 عفوا لا توجد مباريات ")))
                           : SizedBox(),
             ),
             // View All Matches Container

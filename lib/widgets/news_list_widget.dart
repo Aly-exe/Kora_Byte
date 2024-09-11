@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,7 @@ class NewsList extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = GetNewsBloc.get(context);
     return BlocBuilder<GetNewsBloc, GetNewsStates>(builder: (context, state) {
-      return cubit.newsList.isEmpty
+      return cubit.newsList.isEmpty || state is LoadingGetNewsState
           ? SliverToBoxAdapter(
               child: Container(
                 height: 400,
@@ -33,7 +32,6 @@ class NewsList extends StatelessWidget {
                         .getDetailsNews(context, cubit.newsList[index].baseurl!,
                             cubit.newsList[index].href!)
                         .then((value) {
-                      log(cubit.newsList[index].href!);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -72,6 +70,7 @@ class NewsCardWidget extends StatelessWidget {
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Column(
+          textDirection: TextDirection.rtl,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(

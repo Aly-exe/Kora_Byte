@@ -15,3 +15,4 @@ class FailedGetMatchesState extends GetNewsStates{}
 class LoadingDetailsMatchesState extends GetNewsStates{}
 class SucccesGetDetailsMatchesState extends GetNewsStates{}
 class FailedGetDetailsMatchesState extends GetNewsStates{}
+class ChangeSourceIndexState extends GetNewsStates{}

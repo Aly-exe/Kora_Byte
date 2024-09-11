@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:kora_news/constants/colors.dart';
 
 class KoraByteAppBar extends StatelessWidget {
 
 
   @override
   Widget build(BuildContext context) {
+    
     return  Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xff2412C0),
-            Color(0xff4910BC)
-          ], // Define your gradient colors
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
+        gradient: ColorPallet.linearGradient,
       ),
       child: AppBar(
         backgroundColor: Colors.transparent,

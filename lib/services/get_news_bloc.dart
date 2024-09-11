@@ -461,4 +461,9 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
   void changeCurrentindex(int index) {
     currentindex = index;
   }
+  int sourceCurrentIndex = 1 ;
+  void changeSourceIndex(index){
+    sourceCurrentIndex = index;
+    emit(ChangeSourceIndexState());
+  }
 }

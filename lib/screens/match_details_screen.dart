@@ -71,7 +71,8 @@ class MatchDetailsScreen extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14, color: Colors.grey)),
                             Text(
-                                '${cubit.matchinfo.date} ${cubit.matchinfo!.time}',
+                              textDirection: TextDirection.rtl,
+                                '${cubit.matchinfo.date.toString()}  _  ${cubit.matchinfo.time}',
                                 style: TextStyle(
                                     fontSize: 14, color: Colors.grey)),
                             SizedBox(height: 16),

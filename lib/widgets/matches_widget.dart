@@ -109,23 +109,24 @@ class MatchesWidget extends StatelessWidget {
             Container(
               height: cubit.matchesList.length >= 3 ? 160.h : 105.h,
               width: double.infinity,
-              child: state
-                      is LoadingMatchesState // || state is FailedGetMatchesState || cubit.matchesList.isEmpty ||
+              child: state is LoadingMatchesState
                   ? Container(
                       height: 170.h,
                       width: double.infinity,
                       child: Center(child: ProgressIndicator()))
-                  : state is! FailedGetMatchesState &&
-                          cubit.matchesList.isNotEmpty
-                      ? MatchCard(cubit: cubit)
-                      : cubit.matchesList.isEmpty &&
-                              state is SucccesGetMatchesState
+                  : state is FailedGetMatchesState
+                      ? Container(
+                          height: 170.h,
+                          width: double.infinity,
+                          child:
+                              Center(child: Text("تعذر الحصول علي المباريات ")))
+                      : state is SucccesGetMatchesState && cubit.matchesList.isEmpty
                           ? Container(
                               height: 170.h,
                               width: double.infinity,
                               child: Center(
                                   child: Text(" 😔 عفوا لا توجد مباريات ")))
-                          : SizedBox(),
+                          : MatchCard(cubit: cubit),
             ),
             // View All Matches Container
             GestureDetector(

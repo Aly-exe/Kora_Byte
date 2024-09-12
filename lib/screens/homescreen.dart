@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
 
                   NewsList()
                 ]),
-                if(state is LoadingDetailsNewsState ||state is LoadingDetailsMatchesState) CustomLoadingDialog()   
+                if(state is LoadingDetailsNewsState || state is LoadingDetailsMatchesState) CustomLoadingDialog()   
               ],
             );
           },

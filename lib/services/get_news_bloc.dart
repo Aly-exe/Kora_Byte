@@ -263,10 +263,10 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
       });
     } else if (baseurl == "https://yallakora.com") {
       await dio.get(baseurl + Url).then((value) {
-        var title = BeautifulSoup(value.data)
-            .find("h1", class_: "artclHdline")!
-            .text
-            .trim();
+        String title = BeautifulSoup(value.data)
+            .find("h1", class_: "artclHdline")
+            ?.text
+            .trim() ?? BeautifulSoup(value.data).body!.title!.text;
         var descriptionList = BeautifulSoup(value.data)
             .find("div", class_: "ArticleDetails")!
             .findAll("p");
@@ -274,6 +274,11 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
         descriptionList.forEach((e) {
           description += " \n ${e.text.replaceAll("&nbsp;", "")}";
         });
+        if(description == ""){
+            description =BeautifulSoup(value.data)
+            .find("div", class_: "ArticleDetails details")!
+            .find("p")!.text;
+        }
         var imageUrl = BeautifulSoup(value.data)
             .find("div", class_: "articleContainer")!
             .find("div", class_: "imageCntnr")!

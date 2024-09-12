@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/constants/colors.dart';
 import 'package:kora_news/screens/news_with_detailesscreen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
@@ -37,11 +35,11 @@ class NewsList extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => DetailsNewsScreen(
                                     title:
-                                        cubit.detailesFilgoalNewsModel.title!,
+                                        cubit.detailesFilgoalNewsModel.title ?? cubit.newsList[index].title!,
                                     imagelink: cubit
-                                        .detailesFilgoalNewsModel.imagelink!,
+                                        .detailesFilgoalNewsModel.imagelink??cubit.newsList[index].imagelink!,
                                     details: cubit
-                                        .detailesFilgoalNewsModel.detailes!,
+                                        .detailesFilgoalNewsModel.detailes?? "تعذر الحصول علي تفاصيل الخبر",
                                   )));
                     });
                   },

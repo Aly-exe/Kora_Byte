@@ -7,6 +7,7 @@ import 'package:kora_news/constants/colors.dart';
 import 'package:kora_news/screens/match_details_screen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
+import 'package:kora_news/widgets/custom_dialog.dart';
 import 'package:kora_news/widgets/matches_widget.dart';
 
 class AllMatchs extends StatefulWidget {
@@ -17,30 +18,6 @@ class AllMatchs extends StatefulWidget {
 }
 
 class _AllMatchsState extends State<AllMatchs> {
-  //  Timer? timer;
-  //  Color color1 = Color.fromARGB(239, 220, 7, 7);
-  // Color color2 = Color.fromARGB(236, 209, 20, 20);
-  // Color? currentColor = Color.fromARGB(239, 220, 7, 7);
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   timer = Timer.periodic(const Duration(milliseconds: 250), (timer) {
-  //     if (mounted) {  // Check if the widget is still mounted before calling setState
-  //       setState(() {
-  //         currentColor == const Color.fromARGB(239, 220, 7, 7)
-  //             ? currentColor = color2
-  //             : currentColor = color1;
-  //       });
-  //     }
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   timer?.cancel();  // Cancel the timer to avoid further callbacks
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,16 +61,15 @@ class _AllMatchsState extends State<AllMatchs> {
       body: BlocBuilder<GetNewsBloc, GetNewsStates>(
         builder: (context, state) {
           var cubit = GetNewsBloc.get(context);
-          return cubit.matchesList
-                  .isEmpty //state is LoadingMatchesState || state is FailedGetMatchesState ||
+          return cubit.matchesList.isEmpty
               ? Container(
                   height: 170.h,
                   width: double.infinity,
                   child: Center(
-                      child: CircularProgressIndicator(
-                    color: ColorPallet.kNavyColor,
-                  )))
-              : ListView.builder(
+                      child: CustomLoadingDialog()))
+              : Stack(
+                children: [
+                  ListView.builder(
                   itemCount: cubit.matchesList.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
@@ -220,8 +196,11 @@ class _AllMatchsState extends State<AllMatchs> {
                         ),
                       ),
                     );
-                  });
-        },
+                  }),
+                  if(state is LoadingDetailsMatchesState ) Center(child: CustomLoadingDialog(),) 
+        
+                ]
+              );},
       ),
     );
   }

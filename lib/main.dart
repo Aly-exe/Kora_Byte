@@ -7,6 +7,7 @@ import 'package:kora_news/shared/dio_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  ScreenUtil.ensureScreenSize();
   await DioHelper.initDio();
   runApp(const MyApp());
 }

@@ -264,9 +264,10 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
     } else if (baseurl == "https://yallakora.com") {
       await dio.get(baseurl + Url).then((value) {
         String title = BeautifulSoup(value.data)
-            .find("h1", class_: "artclHdline")
-            ?.text
-            .trim() ?? BeautifulSoup(value.data).body!.title!.text;
+                .find("h1", class_: "artclHdline")
+                ?.text
+                .trim() ??
+            BeautifulSoup(value.data).body!.title!.text;
         var descriptionList = BeautifulSoup(value.data)
             .find("div", class_: "ArticleDetails")!
             .findAll("p");
@@ -274,10 +275,11 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
         descriptionList.forEach((e) {
           description += " \n ${e.text.replaceAll("&nbsp;", "")}";
         });
-        if(description == ""){
-            description =BeautifulSoup(value.data)
-            .find("div", class_: "ArticleDetails details")!
-            .find("p")!.text;
+        if (description == "") {
+          description = BeautifulSoup(value.data)
+              .find("div", class_: "ArticleDetails details")!
+              .find("p")!
+              .text;
         }
         var imageUrl = BeautifulSoup(value.data)
             .find("div", class_: "articleContainer")!
@@ -363,7 +365,6 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
     await dio.get(encoded).then((value) {
       var dataContainer =
           BeautifulSoup(value.data).find("section", class_: "mtchDtlsRslt");
-      log(dataContainer.toString());
       matchinfo.championName = dataContainer
               ?.find("div", class_: "tourName")
               ?.find("div", class_: "tourNameBtn")
@@ -416,7 +417,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
           ?.find("div", class_: "matchResult")
           ?.find("div", class_: "result")
           ?.find("span", class_: "a")
-          ?.text
+          ?.getText()
           .toString();
       matchinfo.teamAscore = TeamAScoreContainer?.length == 0
           ? "0"
@@ -427,20 +428,23 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
           ?.find("div", class_: "matchResult")
           ?.find("div", class_: "result")
           ?.find("span", class_: "b")
+          ?.getText()
           .toString();
       matchinfo.teamBscore = TeamBScoreContainer?.length == 0
           ? "0"
           : TeamBScoreContainer!.length > 2
               ? "0"
               : TeamBScoreContainer;
+              
       matchinfo.teamBname = dataContainer
               ?.find("div", class_: "matchScoreInfo")
               ?.find("div", class_: "team teamB")
               ?.find("p")
               ?.text
               .toString()
-              .trim() ??
-          "Team B";
+              .trim() ?? "Team B" ;
+              
+          log(matchinfo.teamBname.toString());
       matchinfo.teamBimageLink = dataContainer
               ?.find("div", class_: "matchScoreInfo")
               ?.find("div", class_: "team teamB")
@@ -451,9 +455,96 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
       matchinfo.tvChannels = dataContainer
               ?.find("div", class_: "matchDetInfo")
               ?.find("span")
-              ?.text
-              .toString() ??
+              ?.text ??
           "لا توجد قنوات ناقله";
+
+      // Team A Score Players And Goals Times
+      var teamAscorePlayersList = dataContainer
+          ?.find("div", class_: "team teamA playerScorers")
+          ?.findAll("span", class_: "playerName");
+      // log("Team A Players HTMl \n ${teamAscorePlayersList.toString()}");
+      matchinfo.teamAScorePlayers.clear();
+      teamAscorePlayersList == null
+          ? matchinfo.teamAScorePlayers = []
+          : teamAscorePlayersList.forEach((element) {
+              matchinfo.teamAScorePlayers.add(element.getText());
+            });
+      // log("Team A Scorer Players ${matchinfo.teamAScorePlayers.toString()}");
+      var teamASGoalsTimesList = dataContainer
+          ?.find("div", class_: "team teamA playerScorers")
+          ?.findAll("div", class_: 'goal icon-goal');
+
+      List<String> teamAPlayers = [];
+      List<List<String>> teamAGoalsTime = [];
+      teamAPlayers.clear();
+      teamAGoalsTime.clear();
+      for (var goalDiv in teamASGoalsTimesList!) {
+        // Extract the player's name
+        var playerName = goalDiv.find('span', class_: 'playerName')?.text ?? '';
+
+        // Extract the times associated with the player
+        var times =
+            goalDiv.findAll('span', class_: 'time').map((e) => e.text).toList();
+
+        // Check if player is already in the list
+        int playerIndex = teamAPlayers.indexOf(playerName);
+        if (playerIndex == -1) {
+          // New player, add to the list
+          teamAPlayers.add(playerName);
+          teamAGoalsTime.add(times); // Add the times for this player
+        } else {
+          // Existing player, append the times
+          teamAGoalsTime[playerIndex].addAll(times);
+        }
+      }
+      matchinfo.teamAScoreTimes = teamAGoalsTime;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Team B Score Players And Goals Times
+      var teamBscorePlayersList = dataContainer
+          ?.find("div", class_: "team teamB playerScorers")
+          ?.findAll("span", class_: "playerName");
+
+      matchinfo.teamBScorePlayers.clear();
+      teamBscorePlayersList == null
+          ? matchinfo.teamBScorePlayers = []
+          : teamBscorePlayersList.forEach((element) {
+              matchinfo.teamBScorePlayers.add(element.getText());
+            });
+      // Team B Goals Time
+      var teamBSGoalsTimesList = dataContainer
+          ?.find("div", class_: "team teamB playerScorers")
+          ?.findAll("div", class_: 'goal icon-goal');
+
+      List<String> teamBPlayers = [];
+      List<List<String>> teamBGoalsTime = [];
+      teamBPlayers.clear();
+      teamBGoalsTime.clear();
+      for (var goalDiv in teamBSGoalsTimesList!) {
+        // Extract the player's name
+        var playerName = goalDiv.find('span', class_: 'playerName')?.text ?? '';
+
+        // Extract the times associated with the player
+        var times =
+            goalDiv.findAll('span', class_: 'time').map((e) => e.text).toList();
+
+        // Check if player is already in the list
+        int playerIndex = teamBPlayers.indexOf(playerName);
+        if (playerIndex == -1) {
+          // New player, add to the list
+          teamBPlayers.add(playerName);
+          teamBGoalsTime.add(times); // Add the times for this player
+        } else {
+          // Existing player, append the times
+          teamBGoalsTime[playerIndex].addAll(times);
+        }
+      }
+      matchinfo.teamBScoreTimes = teamBGoalsTime;
+
+      log(matchinfo.teamAScorePlayers.toString());
+      log(matchinfo.teamAScoreTimes.toString());
+      log(matchinfo.teamBScorePlayers.toString());
+      log(matchinfo.teamBScoreTimes.toString());
 
       emit(SucccesGetDetailsMatchesState());
     }).catchError((Error) {
@@ -466,8 +557,9 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
   void changeCurrentindex(int index) {
     currentindex = index;
   }
-  int sourceCurrentIndex = 1 ;
-  void changeSourceIndex(index){
+
+  int sourceCurrentIndex = 1;
+  void changeSourceIndex(index) {
     sourceCurrentIndex = index;
     emit(ChangeSourceIndexState());
   }

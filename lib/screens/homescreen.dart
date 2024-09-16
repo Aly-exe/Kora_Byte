@@ -16,6 +16,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60), child: KoraByteAppBar()),
 
@@ -23,27 +24,34 @@ class HomeScreen extends StatelessWidget {
 
         body: BlocBuilder<GetNewsBloc, GetNewsStates>(
           builder: (context, state) {
-            return Stack(
-              children: [
-                CustomScrollView(physics: BouncingScrollPhysics(), slivers: [
-                  // Matches Widget
-
-                  SliverToBoxAdapter(
-                    child: MatchesWidget(),
-                  ),
-
-                  // Sources Widget
-
-                  SliverToBoxAdapter(
-                    child: SourcesListViewWidget(),
-                  ),
-
-                  // News Widget
-
-                  NewsList()
-                ]),
-                if(state is LoadingDetailsNewsState || state is LoadingDetailsMatchesState) CustomLoadingDialog()   
-              ],
+            return RefreshIndicator(
+              color: ColorPallet.kNavyColor,
+              onRefresh: () async {
+                await GetNewsBloc.get(context).getMatches();
+                await GetNewsBloc.get(context).getNews(GetNewsBloc.get(context).sourceCurrentIndex);
+              },
+              child: Stack(
+                children: [
+                  CustomScrollView(physics: BouncingScrollPhysics(), slivers: [
+                    // Matches Widget
+              
+                    SliverToBoxAdapter(
+                      child: MatchesWidget(),
+                    ),
+              
+                    // Sources Widget
+              
+                    SliverToBoxAdapter(
+                      child: SourcesListViewWidget(),
+                    ),
+              
+                    // News Widget
+              
+                    NewsList()
+                  ]),
+                  if(state is LoadingDetailsNewsState || state is LoadingDetailsMatchesState) CustomLoadingDialog()   
+                ],
+              ),
             );
           },
         ));

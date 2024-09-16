@@ -21,6 +21,7 @@ class _AllMatchsState extends State<AllMatchs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60.0), // Set height of the AppBar
         child: Container(
@@ -87,6 +88,11 @@ class _AllMatchsState extends State<AllMatchs> {
                         });
                       },
                       child: Container(
+                        decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25)
+                        ),
+                        margin: EdgeInsets.all(10),
                         height: 55.h,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -99,14 +105,12 @@ class _AllMatchsState extends State<AllMatchs> {
                             TeamImageWidget(
                               imageUrl: cubit.matchesList[index].awayTeamimage!,
                             ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
+                            
                             // Away Team Score
                             TeamScoreWidget(
                                 teamScore: cubit.matchesList[index].awayScore),
                             SizedBox(
-                              width: 5.w,
+                              width: 7.w,
                             ),
                             // Some Info about Match (Start || Not Start || finished || Match Time)
                             Container(
@@ -173,21 +177,18 @@ class _AllMatchsState extends State<AllMatchs> {
                                               ),
                                             ],
                                           )),
-
                             SizedBox(
-                              width: 5.w,
+                              width: 7.w,
                             ),
                             // Home Team Score
                             TeamScoreWidget(
                                 teamScore: cubit.matchesList[index].homeScore),
-                            SizedBox(
-                              width: 10.w,
-                            ),
+                            
                             // Home Team Image
                             TeamImageWidget(
                               imageUrl: cubit.matchesList[index].homeTeamimage!,
                             ),
-
+                            
                             // Home Team Name
                             TeamNameWidget(
                               teamName: cubit.matchesList[index].homeTeam,

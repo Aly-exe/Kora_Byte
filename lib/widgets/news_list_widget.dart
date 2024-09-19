@@ -4,52 +4,47 @@ import 'package:kora_news/constants/colors.dart';
 import 'package:kora_news/screens/news_with_detailesscreen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class NewsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = GetNewsBloc.get(context);
     return BlocBuilder<GetNewsBloc, GetNewsStates>(builder: (context, state) {
-      return cubit.newsList.isEmpty || state is LoadingGetNewsState
-          ? SliverToBoxAdapter(
-              child: Container(
-                height: 400,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: ColorPallet.kNavyColor,
-                  ),
-                ),
+      return Skeletonizer.sliver(
+        enabled: state is LoadingFilgoalNewsState?true :cubit.newsIsLoading,
+        child: SliverList(
+          delegate: SliverChildBuilderDelegate(
+              childCount: cubit.newsList.length, (context, index) {
+            return GestureDetector(
+              onTap: () async {
+                await cubit
+                    .getDetailsNews(context, cubit.newsList[index].baseurl!,
+                        cubit.newsList[index].href!)
+                    .then((value) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailsNewsScreen(
+                                title: cubit.detailesFilgoalNewsModel.title ??
+                                    cubit.newsList[index].title!,
+                                imagelink:
+                                    cubit.detailesFilgoalNewsModel.imagelink ??
+                                        cubit.newsList[index].imagelink!,
+                                details:
+                                    cubit.detailesFilgoalNewsModel.detailes ??
+                                        "تعذر الحصول علي تفاصيل الخبر",
+                              )));
+                });
+              },
+              child: NewsCardWidget(
+                cubit: cubit,
+                index: index,
               ),
-            )
-          : SliverList(
-              delegate: SliverChildBuilderDelegate(
-                  childCount: cubit.newsList.length, (context, index) {
-                return GestureDetector(
-                  onTap: () async {
-                    await cubit
-                        .getDetailsNews(context, cubit.newsList[index].baseurl!,
-                            cubit.newsList[index].href!)
-                        .then((value) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailsNewsScreen(
-                                    title:
-                                        cubit.detailesFilgoalNewsModel.title ?? cubit.newsList[index].title!,
-                                    imagelink: cubit
-                                        .detailesFilgoalNewsModel.imagelink??cubit.newsList[index].imagelink!,
-                                    details: cubit
-                                        .detailesFilgoalNewsModel.detailes?? "تعذر الحصول علي تفاصيل الخبر",
-                                  )));
-                    });
-                  },
-                  child: NewsCardWidget(
-                    cubit: cubit,
-                    index: index,
-                  ),
-                );
-              }),
             );
+          }),
+        ),
+      );
     });
   }
 }

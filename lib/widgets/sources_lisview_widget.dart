@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -36,32 +38,35 @@ class SourcesListViewWidget extends StatelessWidget {
                     cubit.changeSourceIndex(index);
                     await cubit.getNews(index);
                   },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5.w),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30.0.w),
-                      border: Border.all(color:index==cubit.sourceCurrentIndex?ColorPallet.kNavyColor.withOpacity(.6): Colors.black87),
-                      // color:index==cubit.sourceCurrentIndex?ColorPallet.kNavyColor:Colors.transparent
-                      gradient: index==cubit.sourceCurrentIndex? ColorPallet.linearGradient: LinearGradient(colors: [Colors.white , Colors.white])
-                    ),
-                    width: index==0 ? 120.w: 130.w,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(8.0.w),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30.0.w),
-                            child: Image.asset(
-                              sourcesList[index].imagelink,
-                              width: 45.w,
-                              height: 50.h,
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.high,
+                  child: FittedBox(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5.w),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.0.w),
+                        border: Border.all(color:index==cubit.sourceCurrentIndex?ColorPallet.kNavyColor.withOpacity(.6): Colors.black87),
+                        // color:index==cubit.sourceCurrentIndex?ColorPallet.kNavyColor:Colors.transparent
+                        gradient: index==cubit.sourceCurrentIndex? ColorPallet.linearGradient: LinearGradient(colors: [Colors.white , Colors.white])
+                      ),
+                      // width: index==0 ? 120.w: 130.w,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0.w),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30.0.w),
+                              child: Image.asset(
+                                sourcesList[index].imagelink,
+                                width: 45.w,
+                                height: 50.h,
+                                fit: BoxFit.cover,
+                                filterQuality: FilterQuality.high,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(sourcesList[index].sourceName ,style: TextStyle(color:index==cubit.sourceCurrentIndex? Colors.white: Colors.black,fontWeight: FontWeight.w500), ),
-                      ],
+                          Text(sourcesList[index].sourceName ,style: TextStyle(color:index==cubit.sourceCurrentIndex? Colors.white: Colors.black,fontWeight: FontWeight.w500 ,fontSize: 14.sp), ),
+                          SizedBox(width: 15.w,)
+                        ],
+                      ),
                     ),
                   ),
                 );

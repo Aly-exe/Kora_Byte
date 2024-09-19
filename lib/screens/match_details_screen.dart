@@ -82,24 +82,26 @@ class MatchDetailsScreen extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14.sp, color: Colors.grey)),
                             SizedBox(height: 5.h),
-                            Directionality(
-                              textDirection: TextDirection.rtl,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.tv),
-                                  SizedBox(
-                                    width: 10.w,
-                                  ),
-                                  Text(
-                                    cubit.matchinfo.tvChannels!,
-                                    textDirection: TextDirection.rtl,
-                                    style: TextStyle(
-                                        fontSize: 14.sp, color: Colors.grey),
-                                  ),
-                                ],
+                            if (cubit.matchinfo.tvChannels !=
+                                "لا توجد قنوات ناقله")
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.tv),
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    Text(
+                                      cubit.matchinfo.tvChannels!,
+                                      textDirection: TextDirection.rtl,
+                                      style: TextStyle(
+                                          fontSize: 14.sp, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
                             SizedBox(height: 10.h),
                             Text('\'${cubit.matchinfo.matchState!}',
                                 style: TextStyle(
@@ -177,6 +179,7 @@ Widget teamCard({
           Container(
               width: 80.w,
               child: Text(teamName,
+                  textDirection: TextDirection.rtl,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   style: TextStyle(

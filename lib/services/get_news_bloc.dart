@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -10,7 +9,6 @@ import 'package:kora_news/models/filgoal_news_model.dart';
 import 'package:kora_news/models/match_details_model.dart';
 import 'package:kora_news/models/match_model.dart';
 import 'package:kora_news/services/get_news_states.dart';
-import 'package:kora_news/widgets/news_list_widget.dart';
 
 class GetNewsBloc extends Cubit<GetNewsStates> {
   GetNewsBloc() : super(GetNewsInitialState());

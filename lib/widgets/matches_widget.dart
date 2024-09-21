@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable
-import 'dart:developer';
 import 'dart:math';
-
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

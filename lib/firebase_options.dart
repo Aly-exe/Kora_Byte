@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'kora-byte.appspot.com',
     measurementId: 'G-47JP94RN3H',
   );
+
 }

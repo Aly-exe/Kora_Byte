@@ -43,6 +43,7 @@ class _AllMatchsState extends State<AllMatchs> {
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
+                fontSize: 16.sp
               ),
             ),
             centerTitle: true,
@@ -50,6 +51,7 @@ class _AllMatchsState extends State<AllMatchs> {
               icon: Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
+                size: 16.w,
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -165,10 +167,12 @@ class _AllMatchsState extends State<AllMatchs> {
                                                   Text(
                                                     cubit.matchesList[index]
                                                         .matchState,
+                                                        style: TextStyle(fontSize: 12.sp),
                                                   ),
                                                   Text(
                                                     cubit.matchesList[index]
                                                         .matchTime,
+                                                        style: TextStyle(fontSize: 12.sp),
                                                   ),
                                                 ],
                                               )),

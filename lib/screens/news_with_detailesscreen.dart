@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class DetailsNewsScreen extends StatelessWidget {
@@ -30,11 +31,12 @@ class DetailsNewsScreen extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
+                fontSize: 16.sp
               ),
             ),
             centerTitle: true,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios, color: Colors.white,)
+              icon: Icon(Icons.arrow_back_ios, color: Colors.white,size: 16.w,)
               ,
               onPressed: () {
                 Navigator.pop(context);
@@ -69,7 +71,7 @@ class DetailsNewsCardWidget extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
               textDirection: TextDirection.rtl,
             ),
             SizedBox(height: 15),
@@ -86,7 +88,7 @@ class DetailsNewsCardWidget extends StatelessWidget {
             SizedBox(height: 30),
             Text(details,
                 style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.w500 ,),
+                    TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500 ,),
                 textDirection: TextDirection.rtl),
           ],
         ));

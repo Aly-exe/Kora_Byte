@@ -35,6 +35,7 @@ class MatchDetailsScreen extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 16.sp
                     ),
                   ),
                   centerTitle: true,
@@ -42,6 +43,7 @@ class MatchDetailsScreen extends StatelessWidget {
                     icon: Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,
+                      size: 16.w,
                     ),
                     onPressed: () {
                       cubit.matchinfo.teamAScorePlayers.clear();
@@ -105,7 +107,7 @@ class MatchDetailsScreen extends StatelessWidget {
                             SizedBox(height: 10.h),
                             Text('\'${cubit.matchinfo.matchState!}',
                                 style: TextStyle(
-                                    color: Colors.green, fontSize: 16)),
+                                    color: Colors.green, fontSize: 14.sp)),
                             SizedBox(height: 15.h),
                           ]),
                         ),
@@ -156,7 +158,7 @@ Widget teamCard({
       child: Column(children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text(teamstate)],
+          children: [Text(teamstate ,style: TextStyle(fontSize: 14.sp),)],
         ),
         SizedBox(
           height: 10.h,

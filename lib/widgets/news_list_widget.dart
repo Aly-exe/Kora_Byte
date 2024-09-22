@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/screens/news_with_detailesscreen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
@@ -71,7 +72,7 @@ class NewsCardWidget extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
               child: Image.network(
                 cubit.newsList[index].imagelink!,
-                height: 150,
+                height: MediaQuery.of(context).size.height >= 800 ? 300 : 150 ,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -85,7 +86,7 @@ class NewsCardWidget extends StatelessWidget {
                     textDirection: TextDirection.rtl,
                     cubit.newsList[index].title!,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

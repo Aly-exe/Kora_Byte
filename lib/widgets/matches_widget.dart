@@ -66,9 +66,9 @@ class DaysWidget extends StatelessWidget {
             initialValue: 2,
             innerPadding: EdgeInsets.all(0),
             children: {
-              1: Text('أمس' ,style: TextStyle(color: Colors.white),),
-              2: Text('اليوم',style: TextStyle(color: Colors.white)),
-              3: Text('غدا',style: TextStyle(color: Colors.white)),
+              1: Text('أمس' ,style: TextStyle(color: Colors.white , fontSize: 12.sp),),
+              2: Text('اليوم',style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+              3: Text('غدا',style: TextStyle(color: Colors.white, fontSize: 12.sp)),
             },
             decoration: BoxDecoration(
               // color: Colors.red,
@@ -182,12 +182,12 @@ class ViewAllMatchesWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.sports_soccer, color: Colors.black),
+            Icon(Icons.sports_soccer, color: Colors.black ,size: 25.w,),
             SizedBox(width: 10),
             Text(
               'View All Matches',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -354,10 +354,12 @@ class MatchStateWidget extends StatelessWidget {
                         Text(
                           widget.cubit.matchesList[index]
                               .matchState,
+                              style: TextStyle(fontSize: 12.sp),
                         ),
                         Text(
                           widget
                               .cubit.matchesList[index].matchTime,
+                              style: TextStyle(fontSize: 12.sp),
                         ),
                       ],
                     )),
@@ -380,6 +382,7 @@ class TeamNameWidget extends StatelessWidget {
         teamName,
         maxLines: 2,
         overflow: TextOverflow.clip,
+        style: TextStyle(fontSize: 13.sp),
       
       ),
     );
@@ -394,7 +397,7 @@ class TeamImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 30.w,
-      height: 30.h,
+      height: MediaQuery.of(context).size.height>=800 ? 40.h :30.h,
       child: Image.network(
         imageUrl,
         fit: BoxFit.cover,
@@ -420,6 +423,7 @@ class TeamScoreWidget extends StatelessWidget {
         textAlign: TextAlign.center,
         textDirection: TextDirection.rtl,
         teamScore,
+        style: TextStyle(fontSize: 13.sp),
       ),
     );
   }

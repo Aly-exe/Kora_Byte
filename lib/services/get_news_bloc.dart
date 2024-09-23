@@ -21,11 +21,12 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
   List<Matches> matchesList = [];
   var newsSection;
   var detailesFilgoalNewsModel = DetailesFilgoalNewsModel();
-  bool matchesIsLoading =true;
-  bool newsIsLoading =true;
-
+  bool matchesIsLoading = true;
+  bool newsIsLoading = true;
+  
+// Get Matchs Time At Home Screen
   Future getMatches({String? link}) async {
-    matchesIsLoading=true;
+    matchesIsLoading = true;
     var url = Uri.decodeFull(link ?? Constants.yallaKoraMatches);
     emit(LoadingMatchesState());
 
@@ -85,7 +86,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
         'بورنموث',
         'برينتفورد',
         'برايتون'
-        'كريستال بالاس',
+            'كريستال بالاس',
         'إيفرتون',
         'فولهام',
         'لوتون تاون',
@@ -173,9 +174,9 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
         // Compare by time if neither match state is "انتهت"
         return aTime.compareTo(bTime);
       });
-  if(matchesList.isNotEmpty){
-    matchesIsLoading=false;
-  }
+      if (matchesList.isNotEmpty) {
+        matchesIsLoading = false;
+      }
       emit(SucccesGetMatchesState());
     }).catchError((error) {
       emit(FailedGetMatchesState());
@@ -184,7 +185,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
 
   Future getFilgoalNews() async {
     newsList.clear();
-    newsIsLoading=true;
+    newsIsLoading = true;
     emit(LoadingFilgoalNewsState());
     await dio.get(Constants.filGaoal).then((value) {
       newsSection = BeautifulSoup(value.data)
@@ -201,134 +202,32 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
           detailes: "There is no details till now",
           imagelink: "https:${e.find("img")!.attributes["data-src"]}",
         ));
-        if(newsList.isNotEmpty){
-      newsIsLoading=false;
-    }
+        if (newsList.isNotEmpty) {
+          newsIsLoading = false;
+        }
         emit(SucccesGetFilgoalNewsState());
       });
     }).catchError((error) {
       emit(FailedGetFilgoalNewsState());
     });
   }
-
+// Get Websites News At Home Screen 
   Future getNews(int index) async {
-    newsIsLoading=true;
+    newsIsLoading = true;
     emit(LoadingGetNewsState());
     if (index == 0) {
-      await dio.get(Constants.Epl).then((value) {
-        newsSection = BeautifulSoup(value.data)
-            .body!
-            .find("div", class_: "flex mt-3 px-4 w-full flex-wrap")!
-            .findAll("a");
-        newsList.clear();
-
-        //fill NewsList By data
-        newsSection.forEach((e) {
-          newsList.add(FilgoalNewsModel(
-            baseurl: "https://egyptianproleague.com",
-            href: e.attributes['href'],
-            title: e.find("h3")!.text.trim(),
-            detailes: "There is no details till now",
-            imagelink: e.find("img")!.attributes["src"],
-          ));
-          emit(SucccesGetNewsState());
-        });
-      }).catchError((error) {
-        emit(FailedGetNewsState());
-      });
+      await getEplNews();
     } else if (index == 1) {
-      await dio.get(Constants.filGaoal).then((value) {
-        newsSection = BeautifulSoup(value.data)
-            .find("div", class_: "main_body")!
-            .find("div", id: "list-box")!
-            .findAll("li");
-        newsList.clear();
-
-        //fill NewsList By data
-        newsSection.forEach((e) {
-          newsList.add(FilgoalNewsModel(
-            baseurl: "https://filgoal.com",
-            href: e.find("a")!.attributes['href'],
-            title: e.find("h6")!.text.trim(),
-            detailes: "There is no details till now",
-            imagelink: "https:${e.find("img")!.attributes["data-src"]}",
-          ));
-          emit(SucccesGetNewsState());
-        });
-      }).catchError((error) {
-        emit(FailedGetNewsState());
-      });
+      await getFilGoalAllNews();
     } else if (index == 2) {
-      await dio.get(Constants.yallaKora).then((value) {
-        newsSection = BeautifulSoup(value.data)
-            .body!
-            .find("ul", id: "ulListing")!
-            .findAll("div", class_: "link");
-        newsList.clear();
-
-        //fill NewsList By data
-        newsSection.forEach((e) {
-          newsList.add(FilgoalNewsModel(
-            baseurl: "https://yallakora.com",
-            href: e.find('a')!.attributes['href'].toString(),
-            title: e.find('p')!.text.toString(),
-            detailes: "There is no details till now", //e.find("p")!.text,
-            imagelink: e.find('img')!.attributes['data-src'].toString(),
-          ));
-          emit(SucccesGetNewsState());
-        });
-      }).catchError((error) {
-        emit(FailedGetNewsState());
-      });
+      await getYallaKoraNews();
     } else if (index == 3) {
-      await dio.get(Constants.koraPlus).then((value) {
-        newsSection = BeautifulSoup(value.data)
-            .body!
-            .find("div", class_: "SearchResultBlock")!
-            .findAll("div", class_: "SecondNews");
-        newsList.clear();
-
-        //fill NewsList By data
-        newsSection.forEach((e) {
-          newsList.add(FilgoalNewsModel(
-            baseurl: "https://koraplus.com",
-            href: e.find('h3')!.find('a')!.attributes['href'],
-            title: e.find('h3')!.text.toString().trim(),
-            detailes: "There is no details till now",
-            imagelink: e
-                .find("div", class_: "secondNewsBlockImage")!
-                .find('img')!
-                .attributes['src'],
-          ));
-          emit(SucccesGetNewsState());
-        });
-      }).catchError((error) {
-        emit(FailedGetNewsState());
-      });
+      await getKoraPlusNews();
     } else if (index == 4) {
-      await dio.get(Constants.btolat).then((value) {
-        newsSection = BeautifulSoup(value.data)
-            .body!
-            .findAll("div", class_: "categoryNewsCard");
-        newsList.clear();
-
-        //fill NewsList By data
-        newsSection.forEach((e) {
-          newsList.add(FilgoalNewsModel(
-            baseurl: "https://www.btolat.com",
-            href: e.find('a')!.attributes['href'],
-            title: e.find('h3')!.text.toString().trim(),
-            detailes: "There is no details till now",
-            imagelink: e.find('img')!.attributes['data-original'],
-          ));
-          emit(SucccesGetNewsState());
-        });
-      }).catchError((error) {
-        emit(FailedGetNewsState());
-      });
+      await getBtolatNews();
     }
-    if(newsList.isNotEmpty){
-      newsIsLoading=false;
+    if (newsList.isNotEmpty) {
+      newsIsLoading = false;
     }
   }
 
@@ -687,5 +586,128 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
   void changeSourceIndex(index) {
     sourceCurrentIndex = index;
     emit(ChangeSourceIndexState());
+  }
+
+// Function That Get and Scrap Websites News
+  Future getEplNews() async {
+    await dio.get(Constants.Epl).then((value) {
+      newsSection = BeautifulSoup(value.data)
+          .body!
+          .find("div", class_: "flex mt-3 px-4 w-full flex-wrap")!
+          .findAll("a");
+      newsList.clear();
+
+      //fill NewsList By data
+      newsSection.forEach((e) {
+        newsList.add(FilgoalNewsModel(
+          baseurl: "https://egyptianproleague.com",
+          href: e.attributes['href'],
+          title: e.find("h3")!.text.trim(),
+          detailes: "There is no details till now",
+          imagelink: e.find("img")!.attributes["src"],
+        ));
+        emit(SucccesGetNewsState());
+      });
+    }).catchError((error) {
+      emit(FailedGetNewsState());
+    });
+  }
+
+  Future getFilGoalAllNews() async {
+    await dio.get(Constants.filGaoal).then((value) {
+      newsSection = BeautifulSoup(value.data)
+          .find("div", class_: "main_body")!
+          .find("div", id: "list-box")!
+          .findAll("li");
+      newsList.clear();
+
+      //fill NewsList By data
+      newsSection.forEach((e) {
+        newsList.add(FilgoalNewsModel(
+          baseurl: "https://filgoal.com",
+          href: e.find("a")!.attributes['href'],
+          title: e.find("h6")!.text.trim(),
+          detailes: "There is no details till now",
+          imagelink: "https:${e.find("img")!.attributes["data-src"]}",
+        ));
+        emit(SucccesGetNewsState());
+      });
+    }).catchError((error) {
+      emit(FailedGetNewsState());
+    });
+  }
+
+  Future getYallaKoraNews() async {
+    await dio.get(Constants.yallaKora).then((value) {
+      newsSection = BeautifulSoup(value.data)
+          .body!
+          .find("ul", id: "ulListing")!
+          .findAll("div", class_: "link");
+      newsList.clear();
+
+      //fill NewsList By data
+      newsSection.forEach((e) {
+        newsList.add(FilgoalNewsModel(
+          baseurl: "https://yallakora.com",
+          href: e.find('a')!.attributes['href'].toString(),
+          title: e.find('p')!.text.toString(),
+          detailes: "There is no details till now", //e.find("p")!.text,
+          imagelink: e.find('img')!.attributes['data-src'].toString(),
+        ));
+        emit(SucccesGetNewsState());
+      });
+    }).catchError((error) {
+      emit(FailedGetNewsState());
+    });
+  }
+
+  Future getKoraPlusNews() async {
+    await dio.get(Constants.koraPlus).then((value) {
+      newsSection = BeautifulSoup(value.data)
+          .body!
+          .find("div", class_: "SearchResultBlock")!
+          .findAll("div", class_: "SecondNews");
+      newsList.clear();
+
+      //fill NewsList By data
+      newsSection.forEach((e) {
+        newsList.add(FilgoalNewsModel(
+          baseurl: "https://koraplus.com",
+          href: e.find('h3')!.find('a')!.attributes['href'],
+          title: e.find('h3')!.text.toString().trim(),
+          detailes: "There is no details till now",
+          imagelink: e
+              .find("div", class_: "secondNewsBlockImage")!
+              .find('img')!
+              .attributes['src'],
+        ));
+        emit(SucccesGetNewsState());
+      });
+    }).catchError((error) {
+      emit(FailedGetNewsState());
+    });
+  }
+
+  Future getBtolatNews() async {
+    await dio.get(Constants.btolat).then((value) {
+      newsSection = BeautifulSoup(value.data)
+          .body!
+          .findAll("div", class_: "categoryNewsCard");
+      newsList.clear();
+
+      //fill NewsList By data
+      newsSection.forEach((e) {
+        newsList.add(FilgoalNewsModel(
+          baseurl: "https://www.btolat.com",
+          href: e.find('a')!.attributes['href'],
+          title: e.find('h3')!.text.toString().trim(),
+          detailes: "There is no details till now",
+          imagelink: e.find('img')!.attributes['data-original'],
+        ));
+        emit(SucccesGetNewsState());
+      });
+    }).catchError((error) {
+      emit(FailedGetNewsState());
+    });
   }
 }

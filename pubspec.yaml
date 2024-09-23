@@ -74,14 +74,14 @@ flutter_launcher_icons:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
-flutter_native_splash:
-  color: "#190159"  # Background color of the splash screen
-  image: assets/images/korabyte.png  # Path to your splash image
-  android: true  # Enable Android splash screen
-  ios: true  # Enable iOS splash screen
-  fullscreen: true  # Optional: Enable full-screen splash on Android
-  android_gravity: center  # Optional: Set image position for Android
-  ios_content_mode: center  # Optional: Set image position for iOS
+# flutter_native_splash:
+#   color: "#190159"  # Background color of the splash screen
+#   image: assets/images/korabyte.png  # Path to your splash image
+#   android: true  # Enable Android splash screen
+#   ios: true  # Enable iOS splash screen
+#   fullscreen: true  # Optional: Enable full-screen splash on Android
+#   android_gravity: center  # Optional: Set image position for Android
+#   ios_content_mode: center  # Optional: Set image position for iOS
 
 flutter:
 

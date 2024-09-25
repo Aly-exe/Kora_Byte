@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kora_news/constants/colors.dart';
+import 'package:kora_news/core/constants/colors.dart';
 
 class CustomLoadingDialog extends StatelessWidget {
   const CustomLoadingDialog({

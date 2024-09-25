@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kora_news/constants/colors.dart';
+import 'package:kora_news/core/constants/colors.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 import 'package:kora_news/widgets/custom_appbar.dart';
@@ -16,12 +16,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-        appBar: PreferredSize(
+      appBar: PreferredSize(
             preferredSize: Size.fromHeight(60), child: KoraByteAppBar()),
-
         // <<<<<<<<<<<<<<< Body >>>>>>>>>>>>
-
         body: BlocBuilder<GetNewsBloc, GetNewsStates>(
           builder: (context, state) {
             return RefreshIndicator(

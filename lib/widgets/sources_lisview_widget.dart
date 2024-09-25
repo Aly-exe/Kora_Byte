@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kora_news/constants/colors.dart';
-import 'package:kora_news/models/sources_model.dart';
+import 'package:kora_news/core/constants/colors.dart';
+import 'package:kora_news/features/home/data/models/sources_model.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kora_news/screens/news_with_detailesscreen.dart';
+import 'package:kora_news/features/home/presntation/view/news_with_detailesscreen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -13,7 +13,14 @@ class NewsList extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = GetNewsBloc.get(context);
     return BlocBuilder<GetNewsBloc, GetNewsStates>(builder: (context, state) {
-      return Skeletonizer.sliver(
+      return (state is FailedGetNewsState || state is FailedGetFilgoalNewsState)? SliverToBoxAdapter(
+        child: Padding(
+          padding:  EdgeInsets.symmetric(vertical: 120.h ,horizontal: 95.w),
+          child: Container(
+            child: Text("تعذر الحصول علي الاخبار" , style: TextStyle(fontSize: 18.sp),),
+          ),
+        ),
+      ) :Skeletonizer.sliver(
         enabled: state is LoadingFilgoalNewsState?true :cubit.newsIsLoading,
         child: SliverList(
           delegate: SliverChildBuilderDelegate(

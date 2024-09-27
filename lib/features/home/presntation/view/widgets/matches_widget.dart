@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/core/constants/colors.dart';
 import 'package:kora_news/core/constants/constants.dart';
-import 'package:kora_news/screens/all_matchs_screen.dart';
-import 'package:kora_news/screens/match_details_screen.dart';
+import 'package:kora_news/features/home/presntation/view/all_matchs_screen.dart';
+import 'package:kora_news/features/home/presntation/view/match_details_screen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -142,12 +142,10 @@ class CannotFetshMatchesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      child: Container(
-          height: 170.h,
-          width: double.infinity,
-          child: Center(child: Text("تعذر الحصول علي المباريات "))),
-    );
+    return Container(
+        height: 170.h,
+        width: double.infinity,
+        child: Center(child: Text("تعذر الحصول علي المباريات ")));
   }
 }
 

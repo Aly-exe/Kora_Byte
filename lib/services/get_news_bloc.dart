@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kora_news/core/constants/constants.dart';
+import 'package:kora_news/core/errors/errror_handler.dart';
 import 'package:kora_news/core/helpers/dio_helper.dart';
 import 'package:kora_news/features/home/data/models/details_filgoal_news.dart';
 import 'package:kora_news/features/home/data/models/filgoal_news_model.dart';
@@ -26,7 +29,6 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
     matchesIsLoading = true;
     var url = Uri.decodeFull(link ?? Constants.yallaKoraMatches);
     emit(LoadingMatchesState());
-
     await DioHelper.getData(link ?? url).then((value) {
       matchesList.clear();
       var data =
@@ -176,6 +178,7 @@ class GetNewsBloc extends Cubit<GetNewsStates> {
       }
       emit(SucccesGetMatchesState());
     }).catchError((error) {
+      // print(ErrorHandler.fromDioException(error));
       emit(FailedGetMatchesState());
     });
   }

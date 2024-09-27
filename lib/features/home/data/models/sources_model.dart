@@ -1,6 +1,6 @@
-class Sources{
-  String sourceName;
-  String imagelink;
+class Sources {
+  final String sourceName;
+  final String imagelink;
 
-Sources({required this.sourceName,required this.imagelink});
+  Sources({required this.sourceName, required this.imagelink});
 }

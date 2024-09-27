@@ -8,7 +8,7 @@ class HorizontalSpace extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  SizedBox(
-      width: width.h,
+      width: width.w,
     );
   }
 }

@@ -8,7 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/core/helpers/dio_helper.dart';
 import 'package:kora_news/firebase_options.dart';
-import 'package:kora_news/features/home/presntation/view/homescreen.dart';
+import 'package:kora_news/features/home/presentation/view/homescreen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:flutter/services.dart';
 

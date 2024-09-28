@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kora_news/features/home/presntation/view/news_with_detailesscreen.dart';
+import 'package:kora_news/features/home/presentation/view/news_with_detailesscreen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 import 'package:skeletonizer/skeletonizer.dart';

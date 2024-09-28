@@ -5,8 +5,8 @@ class DioHelper {
   static Future initDio() async {
     dio = await Dio(
       BaseOptions(
-        connectTimeout: Duration(seconds: 20),
-        receiveTimeout: Duration(seconds: 20)
+        connectTimeout: Duration(seconds: 10),
+        receiveTimeout: Duration(seconds: 10)
       )
     );
   }

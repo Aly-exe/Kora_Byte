@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kora_news/core/constants/colors.dart';
+import 'package:kora_news/features/home/data/repos/home_repo.dart';
+import 'package:kora_news/features/home/data/repos/home_repo_implementation.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 import 'package:kora_news/core/widgets/custom_appbar.dart';
 import 'package:kora_news/core/widgets/custom_dialog.dart';
-import 'package:kora_news/features/home/presntation/view/widgets/matches_widget.dart';
-import 'package:kora_news/features/home/presntation/view/widgets/news_list_widget.dart';
-import 'package:kora_news/features/home/presntation/view/widgets/sources_lisview_widget.dart';
+import 'package:kora_news/features/home/presentation/view/widgets/matches_widget.dart';
+import 'package:kora_news/features/home/presentation/view/widgets/news_list_widget.dart';
+import 'package:kora_news/features/home/presentation/view/widgets/sources_lisview_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -16,6 +18,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // floatingActionButton: FloatingActionButton(onPressed: () async {
+        //   HomeRpeoImplementation homeRepo = HomeRpeoImplementation();
+        //   await homeRepo.getMatches();
+        // }),
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60), child: KoraByteAppBar()),
         // <<<<<<<<<<<<<<< Body >>>>>>>>>>>>
@@ -34,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                     // Matches Widget
 
                     SliverToBoxAdapter(
-                      child:  MatchesWidget(),
+                      child: MatchesWidget(),
                     ),
 
                     // Sources Widget

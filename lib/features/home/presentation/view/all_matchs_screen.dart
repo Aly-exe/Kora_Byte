@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kora_news/features/home/presntation/view/match_details_screen.dart';
+import 'package:kora_news/features/home/presentation/view/match_details_screen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:kora_news/services/get_news_states.dart';
 import 'package:kora_news/core/widgets/custom_dialog.dart';
-import 'package:kora_news/features/home/presntation/view/widgets/matches_widget.dart';
+import 'package:kora_news/features/home/presentation/view/widgets/matches_widget.dart';
 
 class AllMatchs extends StatefulWidget {
   const AllMatchs({super.key});

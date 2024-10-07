@@ -28,34 +28,31 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  beautiful_soup_dart: ^0.3.0
+  bloc: ^8.1.4
+  cached_network_image: ^3.4.0
+  cupertino_icons: ^1.0.6
+  custom_sliding_segmented_control: ^1.8.3
+  dio: ^5.6.0
+  firebase_analytics: ^11.3.0
+  firebase_core: ^3.4.0
+  firebase_crashlytics: ^4.1.0
+  firebase_messaging: ^15.1.0
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.6
-  dio: ^5.6.0
-  bloc: ^8.1.4
-  beautiful_soup_dart: ^0.3.0
   flutter_bloc: ^8.1.6
+  flutter_local_notifications: ^17.2.2
   flutter_native_splash: ^2.4.0
   flutter_screenutil: ^5.9.3
-  cached_network_image: ^3.4.0
+  hash_cached_image: ^0.0.2
   intl: ^0.19.0
-  skeletonizer: ^1.4.2
-  firebase_core: ^3.4.0
-  firebase_messaging: ^15.1.0
-  flutter_local_notifications: ^17.2.2
   path_provider: ^2.1.4
-  custom_sliding_segmented_control: ^1.8.3
-  firebase_crashlytics: ^4.1.0
-  firebase_analytics: ^11.3.0
+  skeletonizer: ^1.4.2
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.13.1"
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.13.1"
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -72,7 +69,6 @@ flutter_launcher_icons:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter packages.
 # flutter_native_splash:
 #   color: "#190159"  # Background color of the splash screen
@@ -82,7 +78,6 @@ flutter_launcher_icons:
 #   fullscreen: true  # Optional: Enable full-screen splash on Android
 #   android_gravity: center  # Optional: Set image position for Android
 #   ios_content_mode: center  # Optional: Set image position for iOS
-
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -94,13 +89,10 @@ flutter:
   assets:
     - assets/images/
   #   - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

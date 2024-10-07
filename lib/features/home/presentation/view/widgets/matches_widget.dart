@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,14 +67,19 @@ class DaysWidget extends StatelessWidget {
             initialValue: 2,
             innerPadding: EdgeInsets.all(0),
             children: {
-              1: Text('أمس' ,style: TextStyle(color: Colors.white , fontSize: 12.sp),),
-              2: Text('اليوم',style: TextStyle(color: Colors.white, fontSize: 12.sp)),
-              3: Text('غدا',style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+              1: Text(
+                'أمس',
+                style: TextStyle(color: Colors.white, fontSize: 12.sp),
+              ),
+              2: Text('اليوم',
+                  style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+              3: Text('غدا',
+                  style: TextStyle(color: Colors.white, fontSize: 12.sp)),
             },
             decoration: BoxDecoration(
               // color: Colors.red,
               gradient: ColorPallet.linearGradientTwo,
-    
+
               borderRadius: BorderRadius.circular(20),
             ),
             thumbDecoration: BoxDecoration(
@@ -87,8 +93,7 @@ class DaysWidget extends StatelessWidget {
                       link: Constants.yallaKoraMatchesYesterday);
                   break;
                 case 2:
-                  await cubit.getMatches(
-                      link: Constants.yallaKoraMatches);
+                  await cubit.getMatches(link: Constants.yallaKoraMatches);
                   break;
                 case 3:
                   await cubit.getMatches(
@@ -100,7 +105,6 @@ class DaysWidget extends StatelessWidget {
     );
   }
 }
-
 
 class CircleIndicatorWidget extends StatelessWidget {
   const CircleIndicatorWidget({
@@ -180,7 +184,11 @@ class ViewAllMatchesWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.sports_soccer, color: Colors.black ,size: 25.w,),
+            Icon(
+              Icons.sports_soccer,
+              color: Colors.black,
+              size: 25.w,
+            ),
             SizedBox(width: 10),
             Text(
               'View All Matches',
@@ -236,7 +244,7 @@ class _MatchCardState extends State<MatchCard> {
                       MaterialPageRoute(
                           builder: (context) => MatchDetailsScreen()));
                 }).catchError((error) {
-                 // log(error);
+                  // log(error);
                 });
               },
               child: FittedBox(
@@ -251,7 +259,8 @@ class _MatchCardState extends State<MatchCard> {
                       ),
                       // Away Team Image
                       TeamImageWidget(
-                        imageUrl: widget.cubit.matchesList[index].awayTeamimage!,
+                        imageUrl:
+                            widget.cubit.matchesList[index].awayTeamimage!,
                       ),
                       SizedBox(
                         width: 10.w,
@@ -263,8 +272,11 @@ class _MatchCardState extends State<MatchCard> {
                         width: 5.w,
                       ),
                       // Some Info about Match (Start || Not Start || finished || Match Time)
-                      MatchStateWidget(widget: widget , index: index,),
-                
+                      MatchStateWidget(
+                        widget: widget,
+                        index: index,
+                      ),
+
                       SizedBox(
                         width: 5.w,
                       ),
@@ -276,9 +288,10 @@ class _MatchCardState extends State<MatchCard> {
                       ),
                       // Home Team Image
                       TeamImageWidget(
-                        imageUrl: widget.cubit.matchesList[index].homeTeamimage!,
+                        imageUrl:
+                            widget.cubit.matchesList[index].homeTeamimage!,
                       ),
-                
+
                       // Home Team Name
                       TeamNameWidget(
                         teamName: widget.cubit.matchesList[index].homeTeam,
@@ -294,11 +307,7 @@ class _MatchCardState extends State<MatchCard> {
 }
 
 class MatchStateWidget extends StatelessWidget {
-   MatchStateWidget({
-    super.key,
-    required this.widget,
-    required this.index
-  });
+  MatchStateWidget({super.key, required this.widget, required this.index});
 
   final MatchCard widget;
   int index;
@@ -308,41 +317,38 @@ class MatchStateWidget extends StatelessWidget {
       child: Container(
           width: max(50.w, 100.w),
           decoration: BoxDecoration(
-            color: widget.cubit.matchesList[index].matchState ==
-                        "الشوط الأول" ||
-                    widget.cubit.matchesList[index].matchState ==
-                        "الشوط الثاني" ||
-                    widget.cubit.matchesList[index].matchState ==
-                        "استراحة"
-                ? Color(0xffC00A0C)
-                : Colors.transparent,
+            color:
+                widget.cubit.matchesList[index].matchState == "الشوط الأول" ||
+                        widget.cubit.matchesList[index].matchState ==
+                            "الشوط الثاني" ||
+                        widget.cubit.matchesList[index].matchState == "استراحة"
+                    ? Color(0xffC00A0C)
+                    : Colors.transparent,
             borderRadius: BorderRadius.circular(30),
           ),
-          child: widget.cubit.matchesList[index].matchState ==
-                  "انتهت"
+          child: widget.cubit.matchesList[index].matchState == "انتهت"
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("انتهت"  , style: TextStyle(fontSize: 12.sp,),),
+                    Text(
+                      "انتهت",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                      ),
+                    ),
                   ],
                 )
-              : widget.cubit.matchesList[index].matchState ==
-                          "الشوط الأول" ||
-                      widget.cubit.matchesList[index]
-                              .matchState ==
+              : widget.cubit.matchesList[index].matchState == "الشوط الأول" ||
+                      widget.cubit.matchesList[index].matchState ==
                           "الشوط الثاني" ||
-                      widget.cubit.matchesList[index]
-                              .matchState ==
-                          "استراحة"
+                      widget.cubit.matchesList[index].matchState == "استراحة"
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          widget.cubit.matchesList[index]
-                              .matchState,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.0.sp),
+                          widget.cubit.matchesList[index].matchState,
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 12.0.sp),
                         ),
                       ],
                     )
@@ -350,14 +356,12 @@ class MatchStateWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.cubit.matchesList[index]
-                              .matchState,
-                              style: TextStyle(fontSize: 12.sp),
+                          widget.cubit.matchesList[index].matchState,
+                          style: TextStyle(fontSize: 12.sp),
                         ),
                         Text(
-                          widget
-                              .cubit.matchesList[index].matchTime,
-                              style: TextStyle(fontSize: 12.sp),
+                          widget.cubit.matchesList[index].matchTime,
+                          style: TextStyle(fontSize: 12.sp),
                         ),
                       ],
                     )),
@@ -381,7 +385,6 @@ class TeamNameWidget extends StatelessWidget {
         maxLines: 2,
         overflow: TextOverflow.clip,
         style: TextStyle(fontSize: 13.sp),
-      
       ),
     );
   }
@@ -393,17 +396,14 @@ class TeamImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
       width: 30.w,
-      height: MediaQuery.of(context).size.height>=800 ? 40.h :30.h,
-      child: Image.network(
-        imageUrl,
-        fit: BoxFit.cover,
-        errorBuilder:
-            (BuildContext context, Object exception, StackTrace? stackTrace) {
-          return Image.asset("assets/images/korabyte.png");
-        },
-      ),
+      height: MediaQuery.of(context).size.height >= 800 ? 40.h : 30.h,
+      fit: BoxFit.cover,
+      errorWidget: (context, url, error) => FailureImageWidget(),
+
     );
   }
 }
@@ -423,6 +423,17 @@ class TeamScoreWidget extends StatelessWidget {
         teamScore,
         style: TextStyle(fontSize: 13.sp),
       ),
+    );
+  }
+}
+
+class FailureImageWidget extends StatelessWidget {
+  Widget build(context) {
+    return Image.asset(
+      "assets/images/korabyte.png",
+      width: 30.w,
+      height: MediaQuery.of(context).size.height >= 800 ? 40.h : 30.h,
+      fit: BoxFit.cover,
     );
   }
 }

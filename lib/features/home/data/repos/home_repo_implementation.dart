@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:kora_news/core/constants/constants.dart';
 import 'package:kora_news/core/functions/arrange_matches_list.dart';
 import 'package:kora_news/core/functions/collect_match_data.dart';
@@ -20,15 +22,19 @@ class HomeRpeoImplementation implements HomeRepo {
   @override
   Future getMatches({String? matchDayLink}) async {
     List<Matches> matchesList = [];
+    matchesList.clear();
     var matcheslink =
         Uri.decodeFull(matchDayLink ?? Constants.yallaKoraMatches);
-    await DioHelper.getData(matcheslink).then((value) {
-      fillMatchesList(value, matchesList);
+    try{
+    var response = await DioHelper.getData(matcheslink);
+      fillMatchesList(response, matchesList);
       arrangeMatchesList(matchesList);
-      print(matchesList[0]);
-    }).catchError((error) {
+      return matchesList;
+
+    }catch(error){
       print("Get Matches List error : $error");
-    });
+      return error;
+    }
   }
 
   @override

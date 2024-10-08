@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/core/helpers/dio_helper.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
 import 'package:kora_news/firebase_options.dart';
 import 'package:kora_news/features/home/presentation/view/homescreen.dart';
 import 'package:kora_news/services/get_news_bloc.dart';
@@ -91,11 +92,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetNewsBloc()
-        ..getFilgoalNews()
-        ..getMatches(),
-      child: ScreenUtilInit(
+    return MultiBlocProvider(
+      providers: [
+      BlocProvider(create: (context) => GetMatchesCubit()..getMatches()),
+    ], child: ScreenUtilInit(
           designSize: const Size(360, 756),
           minTextAdapt: true,
           splitScreenMode: true,
@@ -107,7 +107,24 @@ class _MyAppState extends State<MyApp> {
               title: 'Kora News',
               home: HomeScreen(),
             );
-          }),
-    );
+          }));
+    // return BlocProvider(
+    //   create: (context) => GetNewsBloc()
+    //     ..getFilgoalNews()
+    //     ..getMatches(),
+    //   child: ScreenUtilInit(
+    //       designSize: const Size(360, 756),
+    //       minTextAdapt: true,
+    //       splitScreenMode: true,
+    //       // Use builder only if you need to use library outside ScreenUtilInit context
+    //       builder: (context, child) {
+    //         return MaterialApp(
+    //           debugShowCheckedModeBanner: false,
+    //           locale: Locale('ar'),
+    //           title: 'Kora News',
+    //           home: HomeScreen(),
+    //         );
+    //       }),
+    // );
   }
 }

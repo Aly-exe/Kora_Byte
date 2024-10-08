@@ -10,9 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/core/constants/colors.dart';
 import 'package:kora_news/core/constants/constants.dart';
 import 'package:kora_news/features/home/presentation/view/all_matchs_screen.dart';
-import 'package:kora_news/features/home/presentation/view/match_details_screen.dart';
-import 'package:kora_news/services/get_news_bloc.dart';
-import 'package:kora_news/services/get_news_states.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit_states.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class MatchesWidget extends StatelessWidget {
@@ -22,26 +21,26 @@ class MatchesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetNewsBloc, GetNewsStates>(
+    return BlocBuilder<GetMatchesCubit, GetMatchesStates>(
       builder: (context, state) {
-        var cubit = GetNewsBloc.get(context);
+        var cubit = GetMatchesCubit.get(context);
         return Column(
           children: [
             DaysWidget(cubit: cubit),
             Container(
-              height: cubit.matchesList.length >= 3 ? 160.h : 105.h,
-              width: double.infinity,
-              child: state is LoadingMatchesState
-                  ? MatchCard(cubit: cubit)
-                  : state is FailedGetMatchesState
-                      ? CannotFetshMatchesWidget()
-                      : state is SucccesGetMatchesState &&
-                              cubit.matchesList.isEmpty
-                          ? NoMatchesTodayWidget()
-                          : MatchCard(cubit: cubit),
-            ),
+                height: cubit.matchesList.length >= 3 ? 160.h : 105.h,
+                width: double.infinity,
+                child: state is LoadingGetMatchesState
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : state is FailureGetMatchesState
+                        ? CannotFetshMatchesWidget()
+                        : (cubit.matchesList.isEmpty && state is SuccessGetMatchesState)
+                            ? NoMatchesTodayWidget()
+                            : MatchCard(cubit: cubit)),
             // View All Matches Container
-            if (cubit.newsList.isNotEmpty) ViewAllMatchesWidget()
+            if (cubit.matchesList.isNotEmpty) ViewAllMatchesWidget()
           ],
         );
       },
@@ -55,7 +54,7 @@ class DaysWidget extends StatelessWidget {
     required this.cubit,
   });
 
-  final GetNewsBloc cubit;
+  final GetMatchesCubit cubit;
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +89,14 @@ class DaysWidget extends StatelessWidget {
               switch (index) {
                 case 1:
                   await cubit.getMatches(
-                      link: Constants.yallaKoraMatchesYesterday);
+                      matchday: Constants.yallaKoraMatchesYesterday);
                   break;
                 case 2:
-                  await cubit.getMatches(link: Constants.yallaKoraMatches);
+                  await cubit.getMatches(matchday: Constants.yallaKoraMatches);
                   break;
                 case 3:
                   await cubit.getMatches(
-                      link: Constants.yallaKoraMatchesNextDay);
+                      matchday: Constants.yallaKoraMatchesNextDay);
                   break;
               }
             }),
@@ -130,12 +129,10 @@ class NoMatchesTodayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      child: Container(
-          height: 170.h,
-          width: double.infinity,
-          child: Center(child: Text(" 😔 عفوا لا توجد مباريات "))),
-    );
+    return Container(
+        height: 105.h,
+        width: double.infinity,
+        child: Center(child: Text(" 😔 عفوا لا توجد مباريات ")));
   }
 }
 
@@ -147,7 +144,7 @@ class CannotFetshMatchesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 170.h,
+        height: 105.h,
         width: double.infinity,
         child: Center(child: Text("تعذر الحصول علي المباريات ")));
   }
@@ -205,111 +202,101 @@ class ViewAllMatchesWidget extends StatelessWidget {
   }
 }
 
-class MatchCard extends StatefulWidget {
+class MatchCard extends StatelessWidget {
   const MatchCard({
     super.key,
     required this.cubit,
   });
 
-  final GetNewsBloc cubit;
+  final GetMatchesCubit cubit;
 
-  @override
-  State<MatchCard> createState() => _MatchCardState();
-}
-
-class _MatchCardState extends State<MatchCard> {
   @override
   Widget build(BuildContext context) {
-    return Skeletonizer(
-      enabled: widget.cubit.matchesIsLoading,
-      child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: widget.cubit.matchesList.length >= 3
-              ? 3
-              : widget.cubit.matchesList.length >= 2
-                  ? 2
-                  : widget.cubit.matchesList.length >= 1
-                      ? 1
-                      : 0,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () async {
-                //log("Passed Url from Medole \n ${widget.cubit.matchesList[index].matchhref}");
-                await GetNewsBloc.get(context)
-                    .getMatchDetails(Uri.decodeFull(
-                        widget.cubit.matchesList[index].matchhref))
-                    .then((value) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MatchDetailsScreen()));
-                }).catchError((error) {
-                  // log(error);
-                });
-              },
-              child: FittedBox(
-                child: Container(
-                  height: 55.h,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Away Team Name
-                      TeamNameWidget(
-                        teamName: widget.cubit.matchesList[index].awayTeam,
-                      ),
-                      // Away Team Image
-                      TeamImageWidget(
-                        imageUrl:
-                            widget.cubit.matchesList[index].awayTeamimage!,
-                      ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      // Away Team Score
-                      TeamScoreWidget(
-                          teamScore: widget.cubit.matchesList[index].awayScore),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      // Some Info about Match (Start || Not Start || finished || Match Time)
-                      MatchStateWidget(
-                        widget: widget,
-                        index: index,
-                      ),
+    return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: cubit.matchesList.length >= 3
+            ? 3
+            : cubit.matchesList.length >= 2
+                ? 2
+                : cubit.matchesList.length >= 1
+                    ? 1
+                    : 0,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () async {
+              //log("Passed Url from Medole \n ${widget.cubit.matchesList[index].matchhref}");
+              // await GetNewsBloc.get(context)
+              //     .getMatchDetails(Uri.decodeFull(
+              //         widget.cubit.matchesList[index].matchhref))
+              //     .then((value) {
+              //   Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => MatchDetailsScreen()));
+              // }).catchError((error) {
+              //   // log(error);
+              // });
+            },
+            child: FittedBox(
+              child: Container(
+                height: 55.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Away Team Name
+                    TeamNameWidget(
+                      teamName: cubit.matchesList[index].awayTeam,
+                    ),
+                    // Away Team Image
+                    TeamImageWidget(
+                      imageUrl: cubit.matchesList[index].awayTeamimage!,
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    // Away Team Score
+                    TeamScoreWidget(
+                        teamScore: cubit.matchesList[index].awayScore),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    // Some Info about Match (Start || Not Start || finished || Match Time)
+                    MatchStateWidget(
+                      cubit: cubit,
+                      index: index,
+                    ),
 
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      // Home Team Score
-                      TeamScoreWidget(
-                          teamScore: widget.cubit.matchesList[index].homeScore),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      // Home Team Image
-                      TeamImageWidget(
-                        imageUrl:
-                            widget.cubit.matchesList[index].homeTeamimage!,
-                      ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    // Home Team Score
+                    TeamScoreWidget(
+                        teamScore: cubit.matchesList[index].homeScore),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    // Home Team Image
+                    TeamImageWidget(
+                      imageUrl: cubit.matchesList[index].homeTeamimage!,
+                    ),
 
-                      // Home Team Name
-                      TeamNameWidget(
-                        teamName: widget.cubit.matchesList[index].homeTeam,
-                      ),
-                    ],
-                  ),
+                    // Home Team Name
+                    TeamNameWidget(
+                      teamName: cubit.matchesList[index].homeTeam,
+                    ),
+                  ],
                 ),
               ),
-            );
-          }),
-    );
+            ),
+          );
+        });
   }
 }
 
 class MatchStateWidget extends StatelessWidget {
-  MatchStateWidget({super.key, required this.widget, required this.index});
+  MatchStateWidget({super.key, required this.cubit, required this.index});
 
-  final MatchCard widget;
+  final GetMatchesCubit cubit;
   int index;
   @override
   Widget build(BuildContext context) {
@@ -317,16 +304,14 @@ class MatchStateWidget extends StatelessWidget {
       child: Container(
           width: max(50.w, 100.w),
           decoration: BoxDecoration(
-            color:
-                widget.cubit.matchesList[index].matchState == "الشوط الأول" ||
-                        widget.cubit.matchesList[index].matchState ==
-                            "الشوط الثاني" ||
-                        widget.cubit.matchesList[index].matchState == "استراحة"
-                    ? Color(0xffC00A0C)
-                    : Colors.transparent,
+            color: cubit.matchesList[index].matchState == "الشوط الأول" ||
+                    cubit.matchesList[index].matchState == "الشوط الثاني" ||
+                    cubit.matchesList[index].matchState == "استراحة"
+                ? Color(0xffC00A0C)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(30),
           ),
-          child: widget.cubit.matchesList[index].matchState == "انتهت"
+          child: cubit.matchesList[index].matchState == "انتهت"
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -338,15 +323,14 @@ class MatchStateWidget extends StatelessWidget {
                     ),
                   ],
                 )
-              : widget.cubit.matchesList[index].matchState == "الشوط الأول" ||
-                      widget.cubit.matchesList[index].matchState ==
-                          "الشوط الثاني" ||
-                      widget.cubit.matchesList[index].matchState == "استراحة"
+              : cubit.matchesList[index].matchState == "الشوط الأول" ||
+                      cubit.matchesList[index].matchState == "الشوط الثاني" ||
+                      cubit.matchesList[index].matchState == "استراحة"
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          widget.cubit.matchesList[index].matchState,
+                          cubit.matchesList[index].matchState,
                           style:
                               TextStyle(color: Colors.white, fontSize: 12.0.sp),
                         ),
@@ -356,11 +340,11 @@ class MatchStateWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.cubit.matchesList[index].matchState,
+                          cubit.matchesList[index].matchState,
                           style: TextStyle(fontSize: 12.sp),
                         ),
                         Text(
-                          widget.cubit.matchesList[index].matchTime,
+                          cubit.matchesList[index].matchTime,
                           style: TextStyle(fontSize: 12.sp),
                         ),
                       ],
@@ -396,14 +380,12 @@ class TeamImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return CachedNetworkImage(
       imageUrl: imageUrl,
       width: 30.w,
       height: MediaQuery.of(context).size.height >= 800 ? 40.h : 30.h,
       fit: BoxFit.cover,
       errorWidget: (context, url, error) => FailureImageWidget(),
-
     );
   }
 }

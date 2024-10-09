@@ -9,23 +9,25 @@ class CustomLoadingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Container(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
-      width: 150.w,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.0.w),
-        color: ColorPallet.kNavyColor.withOpacity(.5)
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-        Image.asset("assets/images/korabytelogo.png" ,width: 100.w, ),
-        SizedBox(height: 5.h,),
-        CircularProgressIndicator(color: Colors.white,),
-        SizedBox(height: 10.0.h,),
-        Text("...جاري التحميل",style: TextStyle(fontSize: 18.0.sp ,color: Colors.white),)
-      ],),
-    ),);
+    return FittedBox(
+      child: Center(child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        width: 150.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0.w),
+          color: ColorPallet.kNavyColor.withOpacity(.5)
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+          Image.asset("assets/images/korabytelogo.png" ,width: 100.w, ),
+          SizedBox(height: 5.h,),
+          CircularProgressIndicator(color: Colors.white,),
+          SizedBox(height: 10.0.h,),
+          Text("...جاري التحميل",style: TextStyle(fontSize: 18.0.sp ,color: Colors.white),)
+        ],),
+      ),),
+    );
   }
 }

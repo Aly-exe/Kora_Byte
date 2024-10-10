@@ -11,6 +11,7 @@ import 'package:kora_news/core/helpers/dio_helper.dart';
 import 'package:kora_news/features/home/data/repos/home_repo.dart';
 import 'package:kora_news/features/home/data/repos/home_repo_implementation.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_news/get_new_cubit.dart';
 import 'package:kora_news/firebase_options.dart';
 import 'package:kora_news/features/home/presentation/view/homescreen.dart';
 import 'package:flutter/services.dart';
@@ -97,12 +98,12 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => GetMatchesCubit()..getMatches()),
+          BlocProvider(create: (context) => GetNewsCubit()..getNews),
         ],
         child: ScreenUtilInit(
             designSize: const Size(360, 756),
             minTextAdapt: true,
             splitScreenMode: true,
-            // Use builder only if you need to use library outside ScreenUtilInit context
             builder: (context, child) {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,

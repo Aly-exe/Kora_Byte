@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,8 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/core/constants/colors.dart';
 import 'package:kora_news/core/widgets/horizontal_sizedbox.dart';
 import 'package:kora_news/features/home/data/models/sources_model.dart';
-import 'package:kora_news/services/get_news_bloc.dart';
-import 'package:kora_news/services/get_news_states.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_news/get_new_cubit.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_news/get_news_states.dart';
 
 class SourcesListViewWidget extends StatelessWidget {
   final List<Sources> sourcesList = [
@@ -20,9 +22,9 @@ class SourcesListViewWidget extends StatelessWidget {
   SourcesListViewWidget({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetNewsBloc, GetNewsStates>(
+    return BlocBuilder<GetNewsCubit, GetNewsStates>(
       builder: (context, state) {
-        var cubit = GetNewsBloc.get(context);
+        var cubit = GetNewsCubit.get(context);
         return  Container(
           margin: EdgeInsets.symmetric(vertical: 10.h),
           height: 60.h,
@@ -31,8 +33,13 @@ class SourcesListViewWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 return  GestureDetector(
                   onTap: () async {
-                    cubit.changeSourceIndex(index);
-                    await cubit.getNews(index);
+                    await cubit.getNews(index:index).then((value) {
+                  log("success get news");
+                }).catchError((error){
+                  log("error get news");
+                });
+                    // cubit.changeSourceIndex(index);
+                    // await cubit.getNews(index);
                   },
                   child: FittedBox(
                     child: Container(
@@ -40,13 +47,15 @@ class SourcesListViewWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30.0.w),
                           border: Border.all(
-                              color: index == cubit.sourceCurrentIndex
-                                  ? ColorPallet.kNavyColor.withOpacity(.6)
-                                  : Colors.black87),
-                          gradient: index == cubit.sourceCurrentIndex
-                              ? ColorPallet.linearGradient
-                              : LinearGradient(
-                                  colors: [Colors.white, Colors.white])),
+                              // color: index == cubit.sourceCurrentIndex
+                              //     ? ColorPallet.kNavyColor.withOpacity(.6)
+                              //     : Colors.black87
+                                  ),
+                          // gradient: index == cubit.sourceCurrentIndex
+                          //     ? ColorPallet.linearGradient
+                          //     : LinearGradient(
+                          //         colors: [Colors.white, Colors.white])
+                                  ),
                       child: Row(
                         children: [
                           Padding(
@@ -65,9 +74,9 @@ class SourcesListViewWidget extends StatelessWidget {
                           Text(
                             sourcesList[index].sourceName,
                             style: TextStyle(
-                                color: index == cubit.sourceCurrentIndex
-                                    ? Colors.white
-                                    : Colors.black,
+                                // color: index == cubit.sourceCurrentIndex
+                                //     ? Colors.white
+                                //     : Colors.black,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14.sp),
                           ),

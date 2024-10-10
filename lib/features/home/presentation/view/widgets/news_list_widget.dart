@@ -1,19 +1,19 @@
-// ignore_for_file: must_be_immutable
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kora_news/features/home/presentation/view/news_with_detailesscreen.dart';
-import 'package:kora_news/services/get_news_bloc.dart';
-import 'package:kora_news/services/get_news_states.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_news/get_new_cubit.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_news/get_news_states.dart';
+
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var cubit = GetNewsBloc.get(context);
-    return BlocBuilder<GetNewsBloc, GetNewsStates>(builder: (context, state) {
-      return (state is FailedGetNewsState || state is FailedGetFilgoalNewsState)? SliverToBoxAdapter(
+    final cubit = GetNewsCubit.get(context);
+    return BlocBuilder<GetNewsCubit, GetNewsStates>(builder: (context, state) {
+      return (state is FailedGetNewsState)? SliverToBoxAdapter(
         child: Padding(
           padding:  EdgeInsets.symmetric(vertical: 120.h ,horizontal: 95.w),
           child: Container(
@@ -21,30 +21,33 @@ class NewsList extends StatelessWidget {
           ),
         ),
       ) :Skeletonizer.sliver(
-        enabled: state is LoadingFilgoalNewsState?true :cubit.newsIsLoading,
+        // enabled: state is LoadingFilgoalNewsState?true :cubit.newsIsLoading,
+        enabled: false,
         child: SliverList(
           delegate: SliverChildBuilderDelegate(
               childCount: cubit.newsList.length, (context, index) {
             return GestureDetector(
               onTap: () async {
-                await cubit
-                    .getDetailsNews(context, cubit.newsList[index].baseurl!,
-                        cubit.newsList[index].href!)
-                    .then((value) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DetailsNewsScreen(
-                                title: cubit.detailesFilgoalNewsModel.title ??
-                                    cubit.newsList[index].title!,
-                                imagelink:
-                                    cubit.detailesFilgoalNewsModel.imagelink ??
-                                        cubit.newsList[index].imagelink!,
-                                details:
-                                    cubit.detailesFilgoalNewsModel.detailes ??
-                                        "تعذر الحصول علي تفاصيل الخبر",
-                              )));
-                });
+                
+
+                // await cubit
+                //     .getDetailsNews(context, cubit.newsList[index].baseurl!,
+                //         cubit.newsList[index].href!)
+                //     .then((value) {
+                //   Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => DetailsNewsScreen(
+                //                 title: cubit.detailesFilgoalNewsModel.title ??
+                //                     cubit.newsList[index].title!,
+                //                 imagelink:
+                //                     cubit.detailesFilgoalNewsModel.imagelink ??
+                //                         cubit.newsList[index].imagelink!,
+                //                 details:
+                //                     cubit.detailesFilgoalNewsModel.detailes ??
+                //                         "تعذر الحصول علي تفاصيل الخبر",
+                //               )));
+                // });
               },
               child: NewsCardWidget(
                 cubit: cubit,
@@ -61,7 +64,7 @@ class NewsList extends StatelessWidget {
 class NewsCardWidget extends StatelessWidget {
   NewsCardWidget({super.key, required this.cubit, required this.index});
 
-  final GetNewsBloc cubit;
+  final GetNewsCubit cubit;
   int index;
 
   @override

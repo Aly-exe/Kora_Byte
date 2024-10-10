@@ -4,7 +4,7 @@ import 'package:kora_news/core/constants/constants.dart';
 import 'package:kora_news/features/home/data/models/match_details_model.dart';
 import 'package:kora_news/features/home/data/models/match_model.dart';
 import 'package:kora_news/features/home/data/repos/home_repo_implementation.dart';
-import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit_states.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_states.dart';
 
 class GetMatchesCubit extends Cubit<GetMatchesStates> {
   GetMatchesCubit() : super(GetMatchesInitialState());

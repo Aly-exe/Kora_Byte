@@ -10,7 +10,7 @@ import 'package:kora_news/features/home/presentation/view/widgets/match_card_wid
 import 'package:kora_news/features/home/presentation/view/widgets/no_matches_widget.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/view_all_matches_widget.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
-import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit_states.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_states.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class MatchesWidget extends StatelessWidget {

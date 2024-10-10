@@ -9,7 +9,7 @@ import 'package:kora_news/features/home/presentation/view/widgets/team_image_wid
 import 'package:kora_news/features/home/presentation/view/widgets/team_name_widget.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/team_score_widget.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
-import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit_states.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_states.dart';
 import 'package:kora_news/core/widgets/custom_dialog.dart';
 
 class AllMatchs extends StatelessWidget {

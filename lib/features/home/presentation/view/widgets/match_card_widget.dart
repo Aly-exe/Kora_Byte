@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kora_news/features/home/data/models/match_details_model.dart';
+import 'package:kora_news/features/home/presentation/view/match_details_screen.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/matches_widget.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/team_image_widget.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/team_name_widget.dart';
@@ -28,18 +32,20 @@ class MatchCard extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async {
-              //log("Passed Url from Medole \n ${widget.cubit.matchesList[index].matchhref}");
-              // await GetNewsBloc.get(context)
-              //     .getMatchDetails(Uri.decodeFull(
-              //         widget.cubit.matchesList[index].matchhref))
-              //     .then((value) {
-              //   Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => MatchDetailsScreen()));
-              // }).catchError((error) {
-              //   // log(error);
-              // });
+              await cubit
+                  .getMatchDetails(cubit.matchesList[index].matchhref)
+                  .then((value) {
+                    log(cubit.matchDetails.championName!);
+                
+              Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MatchDetailsScreen(
+                          matchDetails: cubit.matchDetails,
+                        )));
+              }).catchError((error){
+                log(error.toString());
+              });
             },
             child: FittedBox(
               child: Container(
@@ -75,7 +81,7 @@ class MatchCard extends StatelessWidget {
                     ),
                     // Home Team Score
                     TeamScoreWidget(
-                        teamScore:  cubit.matchesList[index].homeScore),
+                        teamScore: cubit.matchesList[index].homeScore),
                     SizedBox(
                       width: 10.w,
                     ),

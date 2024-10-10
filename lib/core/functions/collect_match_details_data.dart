@@ -1,12 +1,11 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:dio/dio.dart';
 import 'package:kora_news/features/home/data/models/match_details_model.dart';
 
-Future scrapingMatchDetails(Response value) async {
+MatchDetails scrapingMatchDetails(value) {
   late MatchDetails matchinfo = MatchDetails();
 
   var dataContainer =
-      BeautifulSoup(value.data).find("section", class_: "mtchDtlsRslt");
+      BeautifulSoup(value).find("section", class_: "mtchDtlsRslt");
   matchinfo.championName = dataContainer
           ?.find("div", class_: "tourName")
           ?.find("div", class_: "tourNameBtn")
@@ -118,25 +117,28 @@ Future scrapingMatchDetails(Response value) async {
   List<List<String>> teamAGoalsTime = [];
   teamAPlayers.clear();
   teamAGoalsTime.clear();
-  for (var goalDiv in teamASGoalsTimesList!) {
-    // Extract the player's name
-    var playerName = goalDiv.find('span', class_: 'playerName')?.text ?? '';
+  if (teamASGoalsTimesList != null) {
+    for (var goalDiv in teamASGoalsTimesList) {
+      // Extract the player's name
+      var playerName = goalDiv.find('span', class_: 'playerName')?.text ?? '';
 
-    // Extract the times associated with the player
-    var times =
-        goalDiv.findAll('span', class_: 'time').map((e) => e.text).toList();
+      // Extract the times associated with the player
+      var times =
+          goalDiv.findAll('span', class_: 'time').map((e) => e.text).toList();
 
-    // Check if player is already in the list
-    int playerIndex = teamAPlayers.indexOf(playerName);
-    if (playerIndex == -1) {
-      // New player, add to the list
-      teamAPlayers.add(playerName);
-      teamAGoalsTime.add(times); // Add the times for this player
-    } else {
-      // Existing player, append the times
-      teamAGoalsTime[playerIndex].addAll(times);
+      // Check if player is already in the list
+      int playerIndex = teamAPlayers.indexOf(playerName);
+      if (playerIndex == -1) {
+        // New player, add to the list
+        teamAPlayers.add(playerName);
+        teamAGoalsTime.add(times); // Add the times for this player
+      } else {
+        // Existing player, append the times
+        teamAGoalsTime[playerIndex].addAll(times);
+      }
     }
   }
+
   matchinfo.teamAScoreTimes.clear();
   matchinfo.teamAScoreTimes = teamAGoalsTime;
 
@@ -161,25 +163,28 @@ Future scrapingMatchDetails(Response value) async {
   List<List<String>> teamBGoalsTime = [];
   teamBPlayers.clear();
   teamBGoalsTime.clear();
-  for (var goalDiv in teamBSGoalsTimesList!) {
-    // Extract the player's name
-    var playerName = goalDiv.find('span', class_: 'playerName')?.text ?? '';
+  if (teamBSGoalsTimesList != null) {
+    for (var goalDiv in teamBSGoalsTimesList) {
+      // Extract the player's name
+      var playerName = goalDiv.find('span', class_: 'playerName')?.text ?? '';
 
-    // Extract the times associated with the player
-    var times =
-        goalDiv.findAll('span', class_: 'time').map((e) => e.text).toList();
+      // Extract the times associated with the player
+      var times =
+          goalDiv.findAll('span', class_: 'time').map((e) => e.text).toList();
 
-    // Check if player is already in the list
-    int playerIndex = teamBPlayers.indexOf(playerName);
-    if (playerIndex == -1) {
-      // New player, add to the list
-      teamBPlayers.add(playerName);
-      teamBGoalsTime.add(times); // Add the times for this player
-    } else {
-      // Existing player, append the times
-      teamBGoalsTime[playerIndex].addAll(times);
+      // Check if player is already in the list
+      int playerIndex = teamBPlayers.indexOf(playerName);
+      if (playerIndex == -1) {
+        // New player, add to the list
+        teamBPlayers.add(playerName);
+        teamBGoalsTime.add(times); // Add the times for this player
+      } else {
+        // Existing player, append the times
+        teamBGoalsTime[playerIndex].addAll(times);
+      }
     }
   }
   matchinfo.teamBScoreTimes.clear();
   matchinfo.teamBScoreTimes = teamBGoalsTime;
+  return matchinfo;
 }

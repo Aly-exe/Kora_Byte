@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/features/home/presentation/view/all_matchs_screen.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
 
 class ViewAllMatchesWidget extends StatelessWidget {
   const ViewAllMatchesWidget({
     super.key,
+    required this.cubit
   });
-
+  final GetMatchesCubit cubit;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async{
         Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => AllMatchs())));
+            context, MaterialPageRoute(builder: ((context) => AllMatchs(matchesCubit: cubit,))));
       },
       child: Container(
         width: 300.w,

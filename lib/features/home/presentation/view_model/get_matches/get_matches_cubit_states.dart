@@ -12,4 +12,8 @@ class FailureGetMatchesState extends GetMatchesStates {
 }
 class LoadingMatchDetailsState extends GetMatchesStates{}
 class SuccessGetMatchDetailsState extends GetMatchesStates{}
-class FailureGetMatchDetailsState extends GetMatchesStates{}
+class FailureGetMatchDetailsState extends GetMatchesStates{
+  final String errorMessage;
+
+  FailureGetMatchDetailsState(this.errorMessage);
+}

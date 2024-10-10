@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kora_news/core/constants/constants.dart';
 import 'package:kora_news/core/helpers/dio_helper.dart';
+import 'package:kora_news/features/home/data/repos/home_repo.dart';
+import 'package:kora_news/features/home/data/repos/home_repo_implementation.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
 import 'package:kora_news/firebase_options.dart';
 import 'package:kora_news/features/home/presentation/view/homescreen.dart';
-import 'package:kora_news/services/get_news_bloc.dart';
 import 'package:flutter/services.dart';
 
 void main() async {
@@ -21,14 +23,14 @@ void main() async {
   var token = await FirebaseMessaging.instance.getToken();
   print("Firebase Message Token is $token}");
   FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   ScreenUtil.ensureScreenSize();
-  await DioHelper.initDio();
+  await DioHelper.initDio(); // initialize Dio
   SystemChrome.setPreferredOrientations([
     DeviceOrientation
         .portraitUp // That Make App Display At Portrait Mode not landScape Mode
@@ -46,8 +48,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-  @override
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -93,21 +95,22 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-      BlocProvider(create: (context) => GetMatchesCubit()..getMatches()),
-    ], child: ScreenUtilInit(
-          designSize: const Size(360, 756),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          // Use builder only if you need to use library outside ScreenUtilInit context
-          builder: (context, child) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              locale: Locale('ar'),
-              title: 'Kora News',
-              home: HomeScreen(),
-            );
-          }));
+        providers: [
+          BlocProvider(create: (context) => GetMatchesCubit()..getMatches()),
+        ],
+        child: ScreenUtilInit(
+            designSize: const Size(360, 756),
+            minTextAdapt: true,
+            splitScreenMode: true,
+            // Use builder only if you need to use library outside ScreenUtilInit context
+            builder: (context, child) {
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                locale: Locale('ar'),
+                title: 'Kora News',
+                home: HomeScreen(),
+              );
+            }));
     // return BlocProvider(
     //   create: (context) => GetNewsBloc()
     //     ..getFilgoalNews()

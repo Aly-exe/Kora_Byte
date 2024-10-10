@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kora_news/core/constants/colors.dart';
-import 'package:kora_news/services/get_news_bloc.dart';
-import 'package:kora_news/services/get_news_states.dart';
+import 'package:kora_news/core/widgets/custom_dialog.dart';
+import 'package:kora_news/features/home/data/models/match_details_model.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit_states.dart';
 
 class MatchDetailsScreen extends StatelessWidget {
+  
+
+        final MatchDetails matchDetails;
+
+  const MatchDetailsScreen({super.key, required this.matchDetails});
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetNewsBloc, GetNewsStates>(
+    return BlocBuilder<GetMatchesCubit, GetMatchesStates>(
       builder: (context, state) {
-        var cubit = GetNewsBloc.get(context);
+        var cubit = GetMatchesCubit.get(context);
+        print(matchDetails.teamAname);
         return Scaffold(
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(60.0), // Set height of the AppBar
+              preferredSize: Size.fromHeight(60.0),
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -33,10 +39,9 @@ class MatchDetailsScreen extends StatelessWidget {
                   title: Text(
                     'تفاصيل المباراه',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.sp
-                    ),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp),
                   ),
                   centerTitle: true,
                   leading: IconButton(
@@ -46,10 +51,10 @@ class MatchDetailsScreen extends StatelessWidget {
                       size: 16.w,
                     ),
                     onPressed: () {
-                      cubit.matchinfo.teamAScorePlayers.clear();
-                      cubit.matchinfo.teamBScorePlayers.clear();
-                      cubit.matchinfo.teamAScoreTimes.clear();
-                      cubit.matchinfo.teamBScoreTimes.clear();
+                      cubit.matchDetails.teamAScorePlayers.clear();
+                      cubit.matchDetails.teamBScorePlayers.clear();
+                      cubit.matchDetails.teamAScoreTimes.clear();
+                      cubit.matchDetails.teamBScoreTimes.clear();
 
                       Navigator.pop(context);
                     },
@@ -57,13 +62,15 @@ class MatchDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            body: state is LoadingDetailsMatchesState
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: ColorPallet.kNavyColor,
-                    ),
+            body: 
+            // state is LoadingMatchDetailsState
+                matchDetails.championName==null? Center(
+                    child: Container(
+                        height: 170.h,
+                        width: double.infinity,
+                        child: Center(child: CustomLoadingDialog())),
                   )
-                : SingleChildScrollView(
+                :SingleChildScrollView(
                     child: Column(
                       children: [
                         //info
@@ -73,18 +80,18 @@ class MatchDetailsScreen extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               vertical: 20.h, horizontal: 16.w),
                           child: Column(children: [
-                            Text(cubit.matchinfo.championName!,
+                            Text(matchDetails.championName!,
                                 style: TextStyle(fontSize: 16.sp)),
-                            Text(cubit.matchinfo.round!,
+                            Text(matchDetails.round!,
                                 style: TextStyle(
                                     fontSize: 14.sp, color: Colors.grey)),
                             Text(
                                 textDirection: TextDirection.rtl,
-                                '${cubit.matchinfo.date.toString()}  _  ${cubit.matchinfo.time}',
+                                '${matchDetails.date.toString()}  _  ${matchDetails.time}',
                                 style: TextStyle(
                                     fontSize: 14.sp, color: Colors.grey)),
                             SizedBox(height: 5.h),
-                            if (cubit.matchinfo.tvChannels !=
+                            if (matchDetails.tvChannels !=
                                 "لا توجد قنوات ناقله")
                               Directionality(
                                 textDirection: TextDirection.rtl,
@@ -96,7 +103,7 @@ class MatchDetailsScreen extends StatelessWidget {
                                       width: 10.w,
                                     ),
                                     Text(
-                                      cubit.matchinfo.tvChannels!,
+                                      matchDetails.tvChannels!,
                                       textDirection: TextDirection.rtl,
                                       style: TextStyle(
                                           fontSize: 14.sp, color: Colors.grey),
@@ -105,7 +112,7 @@ class MatchDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                             SizedBox(height: 10.h),
-                            Text('\'${cubit.matchinfo.matchState!}',
+                            Text('\'${matchDetails.matchState!}',
                                 style: TextStyle(
                                     color: Colors.green, fontSize: 14.sp)),
                             SizedBox(height: 15.h),
@@ -117,27 +124,26 @@ class MatchDetailsScreen extends StatelessWidget {
                         ),
                         teamCard(
                             teamstate: "Home",
-                            teamName: cubit.matchinfo.teamAname!,
-                            teamScore: cubit.matchinfo.teamAscore!,
-                            teamimageLink: cubit.matchinfo.teamAimageLink!,
-                            scorerPlayersList:
-                                cubit.matchinfo.teamAScorePlayers,
-                            goalsTimesList: cubit.matchinfo.teamAScoreTimes),
+                            teamName: matchDetails.teamAname!,
+                            teamScore: matchDetails.teamAscore!,
+                            teamimageLink: matchDetails.teamAimageLink!,
+                            scorerPlayersList: matchDetails.teamAScorePlayers,
+                            goalsTimesList: matchDetails.teamAScoreTimes),
                         SizedBox(
                           height: 10.h,
                         ),
 
                         teamCard(
                             teamstate: "Away",
-                            teamName: cubit.matchinfo.teamBname!,
-                            teamScore: cubit.matchinfo.teamBscore!,
-                            teamimageLink: cubit.matchinfo.teamBimageLink!,
-                            scorerPlayersList:
-                                cubit.matchinfo.teamBScorePlayers,
-                            goalsTimesList: cubit.matchinfo.teamBScoreTimes)
+                            teamName: matchDetails.teamBname!,
+                            teamScore: matchDetails.teamBscore!,
+                            teamimageLink: matchDetails.teamBimageLink!,
+                            scorerPlayersList: matchDetails.teamBScorePlayers,
+                            goalsTimesList: matchDetails.teamBScoreTimes)
                       ],
                     ),
-                  ));
+                  )
+                  );
       },
     );
   }
@@ -158,7 +164,12 @@ Widget teamCard({
       child: Column(children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text(teamstate ,style: TextStyle(fontSize: 14.sp),)],
+          children: [
+            Text(
+              teamstate,
+              style: TextStyle(fontSize: 14.sp),
+            )
+          ],
         ),
         SizedBox(
           height: 10.h,

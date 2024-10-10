@@ -4,8 +4,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kora_news/core/constants/colors.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/matches_widget.dart';
+import 'package:kora_news/features/home/presentation/view/widgets/news_list_widget.dart';
+import 'package:kora_news/features/home/presentation/view/widgets/sources_lisview_widget.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
-import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit_states.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_states.dart';
 import 'package:kora_news/core/widgets/custom_appbar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -43,13 +45,13 @@ class HomeScreen extends StatelessWidget {
                             
                           // Sources Widget
                             
-                          // SliverToBoxAdapter(
-                          //   child: SourcesListViewWidget(),
-                          // ),
+                          SliverToBoxAdapter(
+                            child: SourcesListViewWidget(),
+                          ),
                             
                           // News Widget
                             
-                          // NewsList()
+                          NewsList()
                         ]),
                     // if (state is LoadingDetailsNewsState ||
                     //     state is LoadingDetailsMatchesState)

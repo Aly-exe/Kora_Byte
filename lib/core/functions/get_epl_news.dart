@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kora_news/core/constants/constants.dart';
 import 'package:kora_news/core/helpers/dio_helper.dart';
@@ -25,7 +23,6 @@ Future getEplNews() async {
           imagelink: e.find("img")!.attributes["src"],
         ));
       });
-      log(newsList[0].title??"No Epl Title");
         return newsList;
     }catch(error){
       return Future.error(error);

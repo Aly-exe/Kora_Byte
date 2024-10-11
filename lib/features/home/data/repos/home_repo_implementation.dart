@@ -11,7 +11,8 @@ import 'package:kora_news/core/functions/get_filgoal_news.dart';
 import 'package:kora_news/core/functions/get_korablus_news.dart';
 import 'package:kora_news/core/functions/get_yallakora_news.dart';
 import 'package:kora_news/core/helpers/dio_helper.dart';
-import 'package:kora_news/features/home/data/models/filgoal_news_model.dart';
+import 'package:kora_news/features/home/data/models/news_details_model.dart';
+import 'package:kora_news/features/home/data/models/news_model.dart';
 import 'package:kora_news/features/home/data/models/match_model.dart';
 import 'package:kora_news/features/home/data/repos/home_repo.dart';
 
@@ -33,7 +34,7 @@ class HomeRpeoImplementation implements HomeRepo {
     try {
       var response = await DioHelper.getData(matcheslink);
       fillMatchesList(response, matchesList);
-      matchesList =arrangeMatchesList(matchesList);
+      matchesList = arrangeMatchesList(matchesList);
       return matchesList;
     } catch (error) {
       print("Get Matches List error : $error");
@@ -42,8 +43,8 @@ class HomeRpeoImplementation implements HomeRepo {
   }
 
   @override
-  Future<List<FilgoalNewsModel>> getNews({int? index}) async {
-    List<FilgoalNewsModel> newsList = [];
+  Future<List<NewsModel>> getNews({int? index}) async {
+    List<NewsModel> newsList = [];
     try {
       if (index == 0) {
         newsList = await getEplNews();
@@ -63,8 +64,36 @@ class HomeRpeoImplementation implements HomeRepo {
   }
 
   @override
-  Future getNewsDetails() {
-    // TODO: implement getNewsDetails
-    throw UnimplementedError();
+  Future getNewsDetails({required String baseUrl, required String url}) async {
+    NewsDetailsModel newsDetails = NewsDetailsModel();
+
+    try {
+      if (baseUrl == "https://filgoal.com") {
+        var value = await DioHelper.getData(url);
+        var title = BeautifulSoup(value.data)
+            .find("div", class_: "title")!
+            .find("h1")!
+            .text
+            .trim();
+        var descriptionList = BeautifulSoup(value.data)
+            .find("div", id: "details_content")!
+            .findAll("p");
+        var description = "";
+        descriptionList.forEach((e) {
+          description += "\n ${e.text}";
+        });
+        var imageUrl =
+            "https:${BeautifulSoup(value.data).find("div", class_: "details")!.find("img")!.attributes['src']}";
+        newsDetails.details = description;
+        newsDetails.imagelink = imageUrl;
+        newsDetails.title = title;
+        log(newsDetails.details!);
+        log(newsDetails.imagelink!);
+        log(newsDetails.title!);
+        return newsDetails;
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
   }
 }

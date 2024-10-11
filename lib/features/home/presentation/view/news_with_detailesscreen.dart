@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kora_news/features/home/presentation/view/widgets/failure_team_image_widget.dart';
 
 // ignore: must_be_immutable
 class DetailsNewsScreen extends StatelessWidget {
@@ -79,10 +81,13 @@ class DetailsNewsCardWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  imagelink,
+                child:CachedNetworkImage(
+                  imageUrl: imagelink,
+                  errorWidget: (context, url, error) => FailureImageWidget(),
+                  height: MediaQuery.of(context).size.height >= 800 ? 300 : 150,
+                  width: double.infinity,
                   fit: BoxFit.cover,
-                ),
+                )
               ),
             ),
             SizedBox(height: 30),

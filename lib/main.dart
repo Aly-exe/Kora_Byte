@@ -8,8 +8,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/core/constants/constants.dart';
 import 'package:kora_news/core/helpers/dio_helper.dart';
-import 'package:kora_news/features/home/data/repos/home_repo.dart';
-import 'package:kora_news/features/home/data/repos/home_repo_implementation.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_news/get_new_cubit.dart';
 import 'package:kora_news/firebase_options.dart';
@@ -97,8 +95,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => GetMatchesCubit()..getMatches()),
-          BlocProvider(create: (context) => GetNewsCubit()..getNews),
+          BlocProvider(
+            create: (context) => GetMatchesCubit()
+              ..getMatches(
+                  matchday: Uri.decodeFull(Constants.yallaKoraMatches)),
+          ),
+          BlocProvider(create: (context) => GetNewsCubit()..getNews()),
         ],
         child: ScreenUtilInit(
             designSize: const Size(360, 756),
@@ -112,23 +114,5 @@ class _MyAppState extends State<MyApp> {
                 home: HomeScreen(),
               );
             }));
-    // return BlocProvider(
-    //   create: (context) => GetNewsBloc()
-    //     ..getFilgoalNews()
-    //     ..getMatches(),
-    //   child: ScreenUtilInit(
-    //       designSize: const Size(360, 756),
-    //       minTextAdapt: true,
-    //       splitScreenMode: true,
-    //       // Use builder only if you need to use library outside ScreenUtilInit context
-    //       builder: (context, child) {
-    //         return MaterialApp(
-    //           debugShowCheckedModeBanner: false,
-    //           locale: Locale('ar'),
-    //           title: 'Kora News',
-    //           home: HomeScreen(),
-    //         );
-    //       }),
-    // );
   }
 }

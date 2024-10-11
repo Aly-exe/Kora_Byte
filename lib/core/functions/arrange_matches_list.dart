@@ -1,4 +1,6 @@
-void arrangeMatchesList(List matchesList){
+import 'package:kora_news/features/home/data/models/match_model.dart';
+
+List<Matches> arrangeMatchesList(List<Matches> matchesList){
       
       List<String> Egyptionteams = ['مصر', 'الأهلي', 'الزمالك'];
       List<String> seconedTeamsPriority = [
@@ -106,4 +108,5 @@ void arrangeMatchesList(List matchesList){
         // Compare by time if neither match state is "انتهت"
         return aTime.compareTo(bTime);
       });
+      return matchesList;
 }

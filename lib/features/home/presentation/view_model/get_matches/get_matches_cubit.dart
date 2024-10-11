@@ -14,13 +14,14 @@ class GetMatchesCubit extends Cubit<GetMatchesStates> {
   late MatchDetails matchDetails=MatchDetails();
 
   Future getMatches({String? matchday}) async {
-    matchesList.clear();
     emit(LoadingGetMatchesState());
+    matchesList.clear();
     try {
       matchesList = await homeRepoImp.getMatches(url: matchday ?? Constants.yallaKoraMatches);
+      log("Matches fetched successfully: ${matchesList.length}");
       emit(SuccessGetMatchesState());
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
       emit(FailureGetMatchesState(e.toString()));
     }
   }

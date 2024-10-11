@@ -33,11 +33,11 @@ class HomeRpeoImplementation implements HomeRepo {
     try {
       var response = await DioHelper.getData(matcheslink);
       fillMatchesList(response, matchesList);
-      arrangeMatchesList(matchesList);
+      matchesList =arrangeMatchesList(matchesList);
       return matchesList;
     } catch (error) {
       print("Get Matches List error : $error");
-      return error;
+      return Future.error(error);
     }
   }
 

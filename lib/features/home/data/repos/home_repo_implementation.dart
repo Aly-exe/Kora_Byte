@@ -69,7 +69,7 @@ class HomeRpeoImplementation implements HomeRepo {
 
     try {
       if (baseUrl == "https://filgoal.com") {
-        var value = await DioHelper.getData(url);
+        var value = await DioHelper.getData(baseUrl+url);
         var title = BeautifulSoup(value.data)
             .find("div", class_: "title")!
             .find("h1")!
@@ -90,8 +90,112 @@ class HomeRpeoImplementation implements HomeRepo {
         log(newsDetails.details!);
         log(newsDetails.imagelink!);
         log(newsDetails.title!);
-        return newsDetails;
+      } else if (baseUrl == "https://egyptianproleague.com") {
+        var value = await DioHelper.getData(baseUrl + url);
+        var title = BeautifulSoup(value.data)
+            .find("h1",
+                class_:
+                    "line-height-3 text-base font-medium md:text-2xl md:col-8")!
+            .text
+            .trim();
+        var descriptionList = BeautifulSoup(value.data)
+            .find("div", class_: "news-details-container px-4")!
+            .findAll("p");
+        var description = "";
+        descriptionList.forEach((e) {
+          description += " \n ${e.text}";
+        });
+        var imageUrl = BeautifulSoup(value.data)
+            .find("img", class_: "w-full")!
+            .attributes['src'];
+        newsDetails.title = title;
+        newsDetails.imagelink = imageUrl;
+        newsDetails.details = description;
+      } else if (baseUrl == "https://yallakora.com") {
+        var value = await DioHelper.getData(baseUrl + url);
+        String title = BeautifulSoup(value.data)
+                .find("h1", class_: "artclHdline")
+                ?.text
+                .trim() ??
+            BeautifulSoup(value.data).body!.title!.text;
+        var descriptionList = BeautifulSoup(value.data)
+            .find("div", class_: "ArticleDetails")!
+            .findAll("p");
+        var description = "";
+        descriptionList.forEach((e) {
+          description += " \n ${e.text.replaceAll("&nbsp;", "")}";
+        });
+        if (description == "") {
+          description = BeautifulSoup(value.data)
+              .find("div", class_: "ArticleDetails details")!
+              .find("p")!
+              .text;
+        }
+        var imageUrl = BeautifulSoup(value.data)
+            .find("div", class_: "articleContainer")!
+            .find("div", class_: "imageCntnr")!
+            .find("img")!
+            .attributes['src'];
+        newsDetails.title = title;
+        newsDetails.imagelink = imageUrl;
+        newsDetails.details = description;
+      } else if (baseUrl == "https://koraplus.com") {
+        var value = await DioHelper.getData(baseUrl + url);
+        var title = BeautifulSoup(value.data)
+            .find("div", class_: "articleMainTitle")!
+            .find("h1")!
+            .text
+            .trim();
+        var descriptionList = BeautifulSoup(value.data)
+            .find("div", class_: "ArticleContent")!
+            .findAll("p");
+        var description = "";
+        descriptionList.forEach((e) {
+          description += "\n ${e.text}";
+        });
+        var imageUrl = BeautifulSoup(value.data)
+            .find("div", class_: "detailsMainImage")!
+            .find("img")!
+            .attributes['src'];
+        newsDetails.title = title;
+        newsDetails.imagelink = imageUrl;
+        newsDetails.details = description;
+      } else if (baseUrl == "https://www.btolat.com") {
+        var value = await DioHelper.getData(baseUrl + url);
+        var title = BeautifulSoup(value.data)
+            .find("article", class_: "post")!
+            .find("h1", class_: "title")!
+            .text
+            .trim();
+        var descriptionList = BeautifulSoup(value.data)
+            .find("div", class_: "article-body")!
+            .findAll("p");
+        var style = '''#aniBox {
+        margin: 0px;
+    }
+
+        #aniBox div, #gpt-passback, #gpt-passback div, .aries_stage, .article-body div {
+            margin-bottom: 0px;
+        }''';
+        var script = '''var s, r = false;
+    s = document.createElement('script');
+    s.src = "https://cdn.ideanetwork.site/js/AdScript/Btolat/Init.js?" + new Date().toJSON().slice(0, 13);
+    document.getElementsByTagName('body')[0].appendChild(s);''';
+
+        var description = "";
+        descriptionList.forEach((e) {
+          description +=
+              "${e.getText().replaceAll(style, '').replaceAll(script, '')}";
+        });
+        var imageUrl = BeautifulSoup(value.data)
+            .find("div", class_: "image-box")!
+            .find("img")!
+            .attributes['src'];
+        newsDetails.title = title;
+        newsDetails.imagelink = imageUrl;
+        newsDetails.details = description;
       }
+      return newsDetails;
     } catch (error) {
       return Future.error(error);
     }

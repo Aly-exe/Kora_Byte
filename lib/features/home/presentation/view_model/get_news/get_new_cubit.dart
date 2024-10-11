@@ -24,7 +24,7 @@ class GetNewsCubit extends Cubit<GetNewsStates>{
   Future getNewsDetails({required String baseUrl ,required String url})async{
     emit(LoadingGetNewsDetailsState());
     try{
-      newsDetails=await homeRepo.getNewsDetails(baseUrl: baseUrl, url: baseUrl+url);
+      newsDetails=await homeRepo.getNewsDetails(baseUrl: baseUrl, url:url);
       emit(SuccessGetNewsDetailsState());
     }catch(error){
       log("Cubit Error $error");

@@ -43,24 +43,6 @@ class NewsList extends StatelessWidget {
                           details: cubit.newsDetails.details!,
                         )));
                       });
-                      // await cubit
-                      //     .getDetailsNews(context, cubit.newsList[index].baseurl!,
-                      //         cubit.newsList[index].href!)
-                      //     .then((value) {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => DetailsNewsScreen(
-                      //                 title: cubit.detailesFilgoalNewsModel.title ??
-                      //                     cubit.newsList[index].title!,
-                      //                 imagelink:
-                      //                     cubit.detailesFilgoalNewsModel.imagelink ??
-                      //                         cubit.newsList[index].imagelink!,
-                      //                 details:
-                      //                     cubit.detailesFilgoalNewsModel.detailes ??
-                      //                         "تعذر الحصول علي تفاصيل الخبر",
-                      //               )));
-                      // });
                     },
                     child: NewsCardWidget(
                       cubit: cubit,

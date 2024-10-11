@@ -5,6 +5,7 @@ import 'package:kora_news/core/widgets/custom_dialog.dart';
 import 'package:kora_news/features/home/data/models/match_details_model.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_states.dart';
+import 'package:kora_news/features/home/presentation/view_model/get_news/get_news_states.dart';
 
 class MatchDetailsScreen extends StatelessWidget {
   

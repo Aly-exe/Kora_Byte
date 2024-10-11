@@ -66,7 +66,7 @@ class AllMatchs extends StatelessWidget {
                   width: double.infinity,
                   child: Center(child: CustomLoadingDialog())),
             );
-          } else if (state is SuccessGetMatchesState) {
+          } else if (state is SuccessGetMatchesState|| matchesCubit.matchesList.isNotEmpty) {
             return Stack(children: [
               ListView.builder(
                 itemCount: matchesCubit.matchesList.length,

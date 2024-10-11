@@ -6,3 +6,4 @@ class FailedGetNewsState extends GetNewsStates{}
 class LoadingGetNewsDetailsState extends GetNewsStates{}
 class SuccessGetNewsDetailsState extends GetNewsStates{}
 class FailedGetNewsDetailsState extends GetNewsStates{}
+class ChangeSourceIndexState extends GetNewsStates{}

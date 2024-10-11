@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kora_news/features/home/data/models/news_details_model.dart';
 import 'package:kora_news/features/home/data/models/news_model.dart';
@@ -30,5 +31,10 @@ class GetNewsCubit extends Cubit<GetNewsStates>{
       log("Cubit Error $error");
       emit(FailedGetNewsDetailsState());
     }
+  }
+  int sourceCurrentIndex=1;
+  void changeSourceIndex(int index){
+    sourceCurrentIndex=homeRepo.changeSourceIndex(index);
+    emit(ChangeSourceIndexState());
   }
 }

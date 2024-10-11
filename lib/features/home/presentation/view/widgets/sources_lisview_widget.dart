@@ -33,13 +33,8 @@ class SourcesListViewWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 return  GestureDetector(
                   onTap: () async {
-                    await cubit.getNews(index:index).then((value) {
-                  log("success get news");
-                }).catchError((error){
-                  log("error get news");
-                });
-                    // cubit.changeSourceIndex(index);
-                    // await cubit.getNews(index);
+                    cubit.changeSourceIndex(index);
+                    await cubit.getNews(index:index);
                   },
                   child: FittedBox(
                     child: Container(
@@ -47,14 +42,14 @@ class SourcesListViewWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30.0.w),
                           border: Border.all(
-                              // color: index == cubit.sourceCurrentIndex
-                              //     ? ColorPallet.kNavyColor.withOpacity(.6)
-                              //     : Colors.black87
+                              color: index == cubit.sourceCurrentIndex
+                                  ? ColorPallet.kNavyColor.withOpacity(.6)
+                                  : Colors.black87
                                   ),
-                          // gradient: index == cubit.sourceCurrentIndex
-                          //     ? ColorPallet.linearGradient
-                          //     : LinearGradient(
-                          //         colors: [Colors.white, Colors.white])
+                          gradient: index == cubit.sourceCurrentIndex
+                              ? ColorPallet.linearGradient
+                              : LinearGradient(
+                                  colors: [Colors.white, Colors.white])
                                   ),
                       child: Row(
                         children: [
@@ -74,9 +69,9 @@ class SourcesListViewWidget extends StatelessWidget {
                           Text(
                             sourcesList[index].sourceName,
                             style: TextStyle(
-                                // color: index == cubit.sourceCurrentIndex
-                                //     ? Colors.white
-                                //     : Colors.black,
+                                color: index == cubit.sourceCurrentIndex
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14.sp),
                           ),

@@ -5,4 +5,5 @@ abstract class HomeRepo{
   Future getMatchDetails(String url);
   Future<List<NewsModel>> getNews({int? index});
   Future getNewsDetails({required String baseUrl , required String url});
+  void changeSourceIndex(int index);
 }

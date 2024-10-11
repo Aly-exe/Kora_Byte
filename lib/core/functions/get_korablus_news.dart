@@ -1,10 +1,10 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kora_news/core/constants/constants.dart';
 import 'package:kora_news/core/helpers/dio_helper.dart';
-import 'package:kora_news/features/home/data/models/filgoal_news_model.dart';
+import 'package:kora_news/features/home/data/models/news_model.dart';
 
 Future getKoraPlusNews() async {
-  List<FilgoalNewsModel> newsList=[];
+  List<NewsModel> newsList=[];
     try{var value=await DioHelper.getData(Constants.koraPlus);
       var newsSection = BeautifulSoup(value.data)
           .body!
@@ -14,7 +14,7 @@ Future getKoraPlusNews() async {
 
       //fill NewsList By data
       newsSection.forEach((e) {
-        newsList.add(FilgoalNewsModel(
+        newsList.add(NewsModel(
           baseurl: "https://koraplus.com",
           href: e.find('h3')!.find('a')!.attributes['href'],
           title: e.find('h3')!.text.toString().trim(),

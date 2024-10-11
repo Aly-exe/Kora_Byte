@@ -11,7 +11,7 @@ import 'package:kora_news/core/helpers/dio_helper.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_news/get_new_cubit.dart';
 import 'package:kora_news/firebase_options.dart';
-import 'package:kora_news/features/home/presentation/view/homescreen.dart';
+import 'package:kora_news/features/home/presentation/view/home_screen.dart';
 import 'package:flutter/services.dart';
 
 void main() async {

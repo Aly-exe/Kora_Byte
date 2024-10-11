@@ -5,11 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/failure_team_image_widget.dart';
 
 // ignore: must_be_immutable
-class DetailsNewsScreen extends StatelessWidget {
+class NewsDetailsScreen extends StatelessWidget {
   String title;
   String imagelink;
   String details;
-  DetailsNewsScreen(
+  NewsDetailsScreen(
       {required this.title, required this.details, required this.imagelink});
 
   @override
@@ -84,7 +84,7 @@ class DetailsNewsCardWidget extends StatelessWidget {
                 child:CachedNetworkImage(
                   imageUrl: imagelink,
                   errorWidget: (context, url, error) => FailureImageWidget(),
-                  height: MediaQuery.of(context).size.height >= 800 ? 300 : 150,
+                  height: MediaQuery.of(context).size.height >= 800 ? 350 : 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 )

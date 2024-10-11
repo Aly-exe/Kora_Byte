@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +6,6 @@ import 'package:kora_news/features/home/presentation/view/news_details_screen.da
 import 'package:kora_news/features/home/presentation/view/widgets/failure_team_image_widget.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_news/get_new_cubit.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_news/get_news_states.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewsList extends StatelessWidget {
@@ -29,19 +27,25 @@ class NewsList extends StatelessWidget {
               ),
             )
           : Skeletonizer.sliver(
-              // enabled: state is LoadingFilgoalNewsState?true :cubit.newsIsLoading,
-              enabled: false,
+              enabled: state is LoadingGetNewsState ? true : false,
               child: SliverList(
                 delegate: SliverChildBuilderDelegate(
                     childCount: cubit.newsList.length, (context, index) {
                   return GestureDetector(
                     onTap: () async {
-                      await cubit.getNewsDetails(baseUrl:cubit.newsList[index].baseurl!,url: cubit.newsList[index].href!).then((value) {
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=> NewsDetailsScreen(
-                          title: cubit.newsDetails.title!,
-                          imagelink: cubit.newsDetails.imagelink!,
-                          details: cubit.newsDetails.details!,
-                        )));
+                      await cubit
+                          .getNewsDetails(
+                              baseUrl: cubit.newsList[index].baseurl!,
+                              url: cubit.newsList[index].href!)
+                          .then((value) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NewsDetailsScreen(
+                                      title: cubit.newsDetails.title!,
+                                      imagelink: cubit.newsDetails.imagelink!,
+                                      details: cubit.newsDetails.details!,
+                                    )));
                       });
                     },
                     child: NewsCardWidget(

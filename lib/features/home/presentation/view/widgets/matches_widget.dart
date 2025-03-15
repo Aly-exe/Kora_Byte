@@ -1,17 +1,16 @@
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kora_news/core/constants/colors.dart';
+import 'package:kora_news/core/widgets/custom_dialog.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/days_widget.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/match_card_widget.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/no_matches_widget.dart';
 import 'package:kora_news/features/home/presentation/view/widgets/view_all_matches_widget.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_cubit.dart';
 import 'package:kora_news/features/home/presentation/view_model/get_matches/get_matches_states.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class MatchesWidget extends StatelessWidget {
   const MatchesWidget({
@@ -31,7 +30,7 @@ class MatchesWidget extends StatelessWidget {
                 width: double.infinity,
                 child: state is LoadingGetMatchesState
                     ? Center(
-                        child: CircularProgressIndicator(),
+                        // child: CircularProgressIndicator(),
                       )
                     : state is FailureGetMatchesState
                         ? CannotFetshMatchesWidget()

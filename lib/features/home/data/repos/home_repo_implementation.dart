@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:dio/dio.dart';
 import 'package:kora_news/core/constants/constants.dart';
 import 'package:kora_news/core/functions/arrange_matches_list.dart';
